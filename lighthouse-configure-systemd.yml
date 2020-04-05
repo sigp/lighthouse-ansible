@@ -8,36 +8,4 @@
         src: templates/lighthouse-bn.service.j2
         dest: /etc/systemd/system/lighthouse-bn.service
         force: yes
-    - name: Deploy lighthouse-bn syslog configs
-      become: yes
-      copy:
-        src: ./templates/rsyslog/lighthouse-bn.conf
-        dest: /etc/rsyslog.d/
-        force: yes
-    - name: Deploy lighthouse-vc syslog configs
-      become: yes
-      copy:
-        src: ./templates/rsyslog/lighthouse-vc.conf
-        dest: /etc/rsyslog.d/
-        force: yes
-    - name: Create /var/log/lighthouse-bn.log if required
-      become: yes
-      file:
-        path: /var/log/lighthouse-bn.log
-        state: touch
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-    - name: Create /var/log/lighthouse-vc.log if required
-      become: yes
-      file:
-        path: /var/log/lighthouse-vc.log
-        state: touch
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-    - name: Restart rsyslog
-      become: yes
-      systemd:
-        name: rsyslog
-        state: started
-        daemon-reload: yes
 
