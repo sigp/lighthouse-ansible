@@ -2,7 +2,7 @@
 - name: Migrates a docker-compose node over to a compiled setup
   hosts: docker
   tasks:
-    - name: Create backup-directory
+    - name: Create lighthouse_backup_dir
       file:
         path: "{{ lighthouse_backup_dir }}"
         state: directory
@@ -12,6 +12,12 @@
     - name: Backup validators dir
       become: yes
       shell: 'cp -r {{ docker_compose_dir }}/.lighthouse/validators {{ lighthouse_backup_dir }}'
+    - name: Recursively own lighthouse_backup_dir
+      file:
+        path: "{{ lighthouse_backup_dir }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
     - name: Create ~/.lighthouse
       file:
         path: "{{ lighthouse_dir }}"
@@ -19,6 +25,10 @@
     - name: Copy backup files to .lighthouse
       become: yes
       shell: 'cp -r {{ lighthouse_backup_dir }}/* {{ lighthouse_dir }}'
+    - name: Create ~/.lighthouse
+      file:
+        path: "{{ lighthouse_dir }}"
+        state: directory
     - name: Stop docker-compose environment
       command: docker-compose stop
       args:

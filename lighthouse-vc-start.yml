@@ -1,0 +1,12 @@
+---
+- name: Start lighthouse-vc systemd service
+  hosts: validators
+  tasks:
+    - name: Start and enable the validator client service
+      become: yes
+      systemd:
+        name: lighthouse-vc
+        state: started
+        enabled: yes
+        daemon-reload: yes
+

@@ -1,0 +1,11 @@
+---
+- name: Stop lighthouse-vc systemd-service
+  hosts: all
+  tasks:
+    - name: Stop and disable the validator client service
+      become: yes
+      systemd:
+        name: lighthouse-vc
+        state: stopped
+        enabled: no
+
