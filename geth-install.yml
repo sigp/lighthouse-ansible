@@ -1,0 +1,14 @@
+---
+- name: Install Geth
+  hosts: geth
+  roles:
+    - common
+    - geth
+  tasks:
+    - name: Build from source
+      include_tasks: roles/geth/tasks/build-from-source.yml
+    - name: Configure systemd
+      include_tasks: roles/geth/tasks/configure-systemd.yml
+    - name: Start systemd service
+      include_tasks: roles/geth/tasks/start.yml
+

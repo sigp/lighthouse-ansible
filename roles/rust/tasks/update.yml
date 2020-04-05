@@ -1,0 +1,3 @@
+---
+- name: rustup-upgrade
+  shell: ~/.cargo/bin/rustup update

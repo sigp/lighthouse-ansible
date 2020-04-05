@@ -1,6 +1,13 @@
 ---
 - name: Migrates a docker-compose node over to a compiled setup
   hosts: docker
+  roles:
+    - common
+    - geth
+    - rust
+    - lighthouse
+  vars:
+    - docker_compose_dir: "{{ home_dir }}/lighthouse-docker"
   tasks:
     - name: Create lighthouse_backup_dir
       file:
@@ -41,27 +48,19 @@
       command: docker-compose stop
       args:
         chdir: "{{ docker_compose_dir }}"
-
-- name: Install Geth
-  import_playbook: geth-build-from-source.yml
-
-- name: Configure systemd for Geth
-  import_playbook: geth-configure-systemd.yml
-
-- name: Start Geth
-  import_playbook: geth-start.yml
-
-- name: Install Rust
-  import_playbook: rust-update.yml
-
-- name: Build Lighthouse
-  import_playbook: lighthouse-build-from-source.yml
-
-- name: Configure systemd for Lighthouse
-  import_playbook: lighthouse-configure-systemd.yml
-
-- name: Start Beacon Node
-  import_playbook: lighthouse-bn-start.yml
-
-- name: Start Validator Client
-  import_playbook: lighthouse-vc-start.yml
+    - name: Build Geth from source
+      include_tasks: roles/geth/tasks/build-from-source.yml
+    - name: Configure systemd for Geth
+      include_tasks: roles/geth/tasks/configure-systemd.yml
+    - name: Start Geth systemd service
+      include_tasks: roles/geth/tasks/start.yml
+    - name: Install Rust
+      include_tasks: roles/rust/tasks/install.yml
+    - name: Build Lighthouse from source
+      include_tasks: roles/lighthouse/tasks/build-from-source.yml
+    - name: Configure systemd for Lighthouse
+      include_tasks: roles/lighthouse/tasks/configure-systemd.yml
+    - name: Start Beacon Node
+      include_tasks: roles/lighthouse/tasks/bn-start.yml
+    - name: Start Validator Client
+      include_tasks: roles/lighthouse/tasks/vc-start.yml

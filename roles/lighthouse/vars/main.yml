@@ -1,0 +1,10 @@
+lighthouse_backup_dir: "{{ home_dir }}/lighthouse-backup"
+lighthouse_dir: "{{ home_dir }}/.lighthouse"
+lighthouse_debug: "debug"
+lighthouse_eth1_flag: "{% if 'validators' in group_names %}--eth1{% endif %}"
+lighthouse_bn_exec_start: "/usr/bin/lighthouse --debug-level {{ lighthouse_debug }} bn --http --http-address 0.0.0.0 --network-dir {{  lighthouse_dir }}/network {{ lighthouse_eth1_flag }}"
+lighthouse_vc_exec_start: "/usr/bin/lighthouse --debug-level {{ lighthouse_debug }} vc"
+
+lighthouse_repo_url: "https://github.com/sigp/lighthouse.git"
+lighthouse_repo_dir: "{{ home_dir }}/lighthouse"
+lighthouse_repo_branch: "testnet5"

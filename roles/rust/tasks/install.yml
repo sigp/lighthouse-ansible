@@ -1,0 +1,8 @@
+---
+- name: install-rustup
+  shell: |
+    set -o pipefail
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+  args:
+    creates: ~/.cargo/bin/rustup
+    executable: /bin/bash

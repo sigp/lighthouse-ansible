@@ -1,0 +1,8 @@
+---
+- name: Stop and disable the beacon node service
+  become: yes
+  systemd:
+    name: lighthouse-bn
+    state: stopped
+    enabled: no
+

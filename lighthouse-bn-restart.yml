@@ -1,8 +1,0 @@
----
-- name: Restart lighthouse-bn systemd-service
-  hosts: all
-
-- name: Stop
-  import_playbook: lighthouse-bn-stop.yml
-- name: Start
-  import_playbook: lighthouse-bn-start.yml

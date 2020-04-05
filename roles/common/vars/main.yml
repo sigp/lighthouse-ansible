@@ -1,0 +1,2 @@
+ansible_user: "ec2-user"
+home_dir: "/home/{{ ansible_user }}"
