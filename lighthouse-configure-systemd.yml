@@ -1,5 +1,5 @@
 ---
-- name: Deploy systemd and rsyslog files
+- name: Deploy Lighthouse systemd unit files
   hosts: all
   tasks:
     - name: Deploy lighthouse-bn.service template

@@ -1,0 +1,20 @@
+[Unit]
+Description=Geth Ethereum Client
+After=syslog.target network.target
+
+[Service]
+User={{ ansible_user }}
+Type=simple
+ExecStart={{ geth_exec_start }}
+KillMode=process
+KillSignal=SIGINT
+TimeoutStopSec=90
+Restart=on-failure
+RestartSec=10s
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=geth
+
+[Install]
+WantedBy=multi-user.target
+

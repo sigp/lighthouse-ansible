@@ -34,11 +34,23 @@
       args:
         chdir: "{{ docker_compose_dir }}"
 
+- name: Install Geth
+  import_playbook: geth-build-from-source.yml
+
+- name: Configure systemd for Geth
+  import_playbook: geth-configure-systemd.yml
+
+- name: Start Geth
+  import_playbook: geth-start.yml
+
 - name: Install Rust
   import_playbook: rust-update.yml
 
 - name: Build Lighthouse
   import_playbook: lighthouse-build-from-source.yml
+
+- name: Configure systemd for Lighthouse
+  import_playbook: lighthouse-configure-systemd.yml
 
 - name: Start Beacon Node
   import_playbook: lighthouse-bn-start.yml
