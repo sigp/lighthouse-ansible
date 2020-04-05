@@ -45,7 +45,7 @@ Structure](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_ro
 
 The list of managed hosts is included in an
 [Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html);
-we provide a [`default-inventory`](./default-inventory), however users will
+we provide a [`example-inventory`](./example-inventory), however users will
 likely generate their own inventories per testnet (e.g., `testnet5`).
 
 Hosts are assigned to groups:
