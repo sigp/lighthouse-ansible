@@ -11,19 +11,23 @@
       shell: 'cp -r {{ docker_compose_dir }}/network {{ lighthouse_backup_dir }}'
     - name: Backup validators dir
       become: yes
+      when: "'validators' in group_names"
       shell: 'cp -r {{ docker_compose_dir }}/.lighthouse/validators {{ lighthouse_backup_dir }}'
-    - name: Recursively own lighthouse_backup_dir
+    - name: chown -R lighthouse_backup_dir
+      become: yes
       file:
         path: "{{ lighthouse_backup_dir }}"
-        state: directory
         owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
     - name: Create ~/.lighthouse
       file:
         path: "{{ lighthouse_dir }}"
         state: directory
-    - name: Copy backup files to .lighthouse
+    - name: chown -R lighthouse_dir
       become: yes
+      file:
+        path: "{{ lighthouse_dir }}"
+        owner: "{{ ansible_user }}"
+    - name: Copy backup files to .lighthouse
       shell: 'cp -r {{ lighthouse_backup_dir }}/* {{ lighthouse_dir }}'
     - name: Create ~/.lighthouse
       file:
@@ -54,3 +58,6 @@
 
 - name: Start Beacon Node
   import_playbook: lighthouse-bn-start.yml
+
+- name: Start Validator Client
+  import_playbook: lighthouse-vc-start.yml
