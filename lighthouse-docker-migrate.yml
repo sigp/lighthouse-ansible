@@ -17,7 +17,9 @@
       become: yes
       file:
         path: "{{ lighthouse_backup_dir }}"
+        recurse: yes
         owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
     - name: Create ~/.lighthouse
       file:
         path: "{{ lighthouse_dir }}"
@@ -26,7 +28,9 @@
       become: yes
       file:
         path: "{{ lighthouse_dir }}"
+        recurse: yes
         owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
     - name: Copy backup files to .lighthouse
       shell: 'cp -r {{ lighthouse_backup_dir }}/* {{ lighthouse_dir }}'
     - name: Create ~/.lighthouse
