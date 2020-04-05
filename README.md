@@ -81,3 +81,11 @@ ansible-playbook -i testnet5 -l oregon migrate-from-docker-setup.yml
 This command will use the `testnet5` inventory file (`-i`) to find hosts, the
 action will be limited (`-l`) to nodes in the `oregon` group and it will run
 the tasks in the `migrate-from-docker-setup.yml`.
+
+#### List of Plays
+
+Each play is listed here:
+ - [migrate-from-docker-setup.yml](./migrate-from-docker-setup.yml): migrates a
+	 node running the
+	 [lighthouse-docker](https://github.com/sigp/lighthouse-docker) setup and
+	 migrates it to a locally-compiled setup.
