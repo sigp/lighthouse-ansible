@@ -1,0 +1,12 @@
+---
+- name: Start lighthouse-bn systemd service
+  hosts: all
+  tasks:
+    - name: Start and enable the beacon node service
+      become: yes
+      systemd:
+        name: lighthouse-bn
+        state: started
+        enabled: yes
+        daemon-reload: yes
+

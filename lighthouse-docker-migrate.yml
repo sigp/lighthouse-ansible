@@ -1,0 +1,34 @@
+---
+- name: Migrates a docker-compose node over to a compiled setup
+  hosts: docker
+  tasks:
+    - name: Create backup-directory
+      file:
+        path: "{{ lighthouse_backup_dir }}"
+        state: directory
+    - name: Backup network dir
+      become: yes
+      shell: 'cp -r {{ docker_compose_dir }}/network {{ lighthouse_backup_dir }}'
+    - name: Backup validators dir
+      become: yes
+      shell: 'cp -r {{ docker_compose_dir }}/.lighthouse/validators {{ lighthouse_backup_dir }}'
+    - name: Create ~/.lighthouse
+      file:
+        path: "{{ lighthouse_dir }}"
+        state: directory
+    - name: Copy backup files to .lighthouse
+      become: yes
+      shell: 'cp -r {{ lighthouse_backup_dir }}/* {{ lighthouse_dir }}'
+    - name: Stop docker-compose environment
+      command: docker-compose stop
+      args:
+        chdir: "{{ docker_compose_dir }}"
+
+- name: Install Rust
+  import_playbook: rust-update.yml
+
+- name: Build Lighthouse
+  import_playbook: lighthouse-build-from-source.yml
+
+- name: Start Beacon Node
+  import_playbook: lighthouse-bn-start.yml

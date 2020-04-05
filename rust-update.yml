@@ -1,0 +1,13 @@
+---
+- name: Install or update to latest Rust
+  hosts: all
+  tasks:
+    - name: install-rustup
+      shell: |
+        set -o pipefail
+        curl https://sh.rustup.rs -sSf | sh -s -- -y
+      args:
+        creates: ~/.cargo/bin/rustup
+        executable: /bin/bash
+    - name: rustup-upgrade
+      shell: ~/.cargo/bin/rustup update

@@ -1,0 +1,21 @@
+---
+- name: Provision Lighthouse Node
+  hosts: all
+  tasks:
+    - name: Update sigp/lighthouse repo
+      git:
+        repo: "{{ lighthouse_repo_url }}"
+        dest: "{{ lighthouse_repo_dir }}"
+        version: "{{ lighthouse_repo_branch }}"
+    - name: Run cargo build
+      # Using `build` instead of `install` since it seems to handle
+      # builds that don't change easier.
+      shell: '~/.cargo/bin/cargo build --release --bin lighthouse'
+      args:
+        chdir: "{{ lighthouse_repo_dir }}"
+    - name: Symlink target/release/lighthouse to /usr/bin
+      become: yes
+      file:
+        src: "{{ lighthouse_repo_dir }}/target/release/lighthouse"
+        dest: /usr/bin/lighthouse
+        state: link
