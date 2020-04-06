@@ -87,5 +87,5 @@ the tasks in the `migrate-from-docker-setup.yml`.
 Each play is listed here:
  - [migrate-from-docker-setup.yml](./migrate-from-docker-setup.yml): migrates a
 	 node running the
-	 [lighthouse-docker](https://github.com/sigp/lighthouse-docker) setup and
-	 migrates it to a locally-compiled setup.
+	 [lighthouse-docker](https://github.com/sigp/lighthouse-docker) setup to a
+	 locally-compiled setup.
