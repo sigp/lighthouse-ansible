@@ -11,8 +11,8 @@ The goal of this Ansible workspace is to provision and manage Lighthouse
 nodes. It supports two primary types of nodes:
 
 - **Boot nodes**: runs a `lighthouse bn` process.
-- **Validator clients**: runs `lighthouse bn` and `lighthouse vc` processes and
-	also a `geth` process.
+- **Validator clients**: runs `lighthouse bn`, `lighthouse vc` and
+	`geth` processes.
 
 These processes are run via the following three systemd units:
 
