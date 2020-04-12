@@ -89,3 +89,9 @@ Each play is listed here:
 	 node running the
 	 [lighthouse-docker](https://github.com/sigp/lighthouse-docker) setup to a
 	 locally-compiled setup.
+ - [provision.yml](./provision.yml): provisions Lighthouse and Geth services.
+	 Will pull the latest versions of each and build them. Will start the
+	 services after they have been built, however it will _not_ restart any
+	 existing services.
+ - [restart.yml](./restart.yml): stops then starts the Lighthouse and Geth
+	 services. Does not delete any existing databases.
