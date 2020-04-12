@@ -1,0 +1,8 @@
+---
+- name: Stop and disable the geth service
+  become: yes
+  systemd:
+    name: geth
+    state: stopped
+    enabled: no
+    daemon-reload: yes

@@ -1,0 +1,27 @@
+---
+- name: Restarts the Lighthouse and Geth services, maintaining the existing dbs
+  hosts:
+    - boot_nodes
+    - validators
+    - developers
+  roles:
+    - common
+    - geth
+    - lighthouse
+  gather_facts:
+      false
+  vars:
+    - docker_compose_dir: "{{ home_dir }}/lighthouse-docker"
+  tasks:
+    - name: Stop Geth
+      include_tasks: roles/geth/tasks/stop.yml
+    - name: Start Geth
+      include_tasks: roles/geth/tasks/start.yml
+    - name: Stop Lighthouse VC
+      include_tasks: roles/lighthouse/tasks/vc-stop.yml
+    - name: Stop Lighthouse BN
+      include_tasks: roles/lighthouse/tasks/bn-stop.yml
+    - name: Start Lighthouse BN
+      include_tasks: roles/lighthouse/tasks/bn-start.yml
+    - name: Start Lighthouse VC
+      include_tasks: roles/lighthouse/tasks/vc-start.yml
