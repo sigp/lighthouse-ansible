@@ -1,2 +1,4 @@
 testnet5
 secret.yml
+/aws
+*.swp
