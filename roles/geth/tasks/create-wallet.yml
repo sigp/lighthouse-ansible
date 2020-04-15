@@ -1,0 +1,15 @@
+---
+- name: Deploy eth1password file
+  template:
+    src: ../templates/eth1password.j2
+    dest: "{{ geth_data_dir }}/eth1password"
+    force: no
+- name: Get contents of keystore directory
+  find: 
+    paths: "{{ geth_keystore_dir }}"
+    file_type: directory
+    patterns: "UTC*"
+  register: key_files
+- name:  Create keystore if none exists
+  command: "geth account new --datadir {{ geth_data_dir }} "
+  when: key_files.matched|int != 0

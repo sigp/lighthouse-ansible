@@ -11,8 +11,6 @@
     - lighthouse
   gather_facts:
       false
-  vars:
-    - docker_compose_dir: "{{ home_dir }}/lighthouse-docker"
   tasks:
     - name: Build Geth from source
       include_tasks: roles/geth/tasks/build-from-source.yml

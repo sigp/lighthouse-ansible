@@ -1,4 +1,6 @@
 geth_repo_url: "https://github.com/ethereum/go-ethereum.git"
 geth_repo_dir: "{{ home_dir }}/go-ethereum"
+geth_data_dir: "{{ home_dir }}/.ethereum"
+geth_keystore_dir: "{{ geth_data_dir }}/goerli/keystore"
 geth_repo_version: "v1.9.12"
 geth_exec_start: "/usr/bin/geth --goerli --rpc --rpcvhosts=*"
