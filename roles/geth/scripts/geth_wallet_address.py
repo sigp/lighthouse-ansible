@@ -14,4 +14,5 @@ keys_dir = sys.argv[1]
 key = listdir(keys_dir)[0]
 regex = "UTC--.*--([0-9a-fA-F].*)"
 
-print(re.search(regex, key).group(1))
+sys.stdout.write(re.search(regex, key).group(1))
+sys.stdout.flush()

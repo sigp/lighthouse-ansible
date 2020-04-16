@@ -1,0 +1,10 @@
+---
+- name: Add SSH keys from Github users
+  vars:
+    ansible_ssh_private_key_file: "{{ aws_key_location }}"
+  loop: "{{ github_user_pubkeys }}"
+  authorized_key:
+    user: ec2-user
+    state: present
+    key: "https://github.com/{{ item }}.keys"
+

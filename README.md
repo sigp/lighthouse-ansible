@@ -43,18 +43,27 @@ Structure](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_ro
 
 ### Inventory
 
-The list of managed hosts is included in an
-[Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html);
-we provide a [`example-inventory`](./example-inventory), however users will
-likely generate their own inventories per testnet (e.g., `testnet5`).
+The [`example-testnet`](./example-testnet) is an Ansible [Dynamic
+Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_dynamic_inventory.html)
+using the [EC2 inventory source]
+(https://docs.ansible.com/ansible/latest/plugins/inventory/aws_ec2.html).
 
-Hosts are assigned to groups:
+Configure your own testnet by duplicating the `example-testnet` inventory.
+Modify the `group_vars/all.yml` file to configure it. Be sure to use a
+different `testnet_tag` for each testnet, so you can maintain independent
+control. Don't forget to update the `tag:Testnet` filter in
+`hosts.aws_ec2.yml`!
 
-- `validators`: nodes which should run the `lighthouse-bn` and `lighthouse-vc`
-	services.
-- `boot_nodes`: nodes which should run a `lighthouse bn` service.
-- `geth`: nodes which should run a `geth` service.
+### Secrets
 
+As with most infrastructure, there are secrets you should keep locally and not
+add to the repository. These secret variables are expected to be found in a
+`secret.yml` file in the root of the repository. A
+[example-secret.yml](./example-secret.yml) file is included to indicate what is
+required.
+
+Additionally, you should have the `AWS_ACCESS_KEY` and `AWS_SECRET_KEY`
+environment variables set.
 
 ### Roles
 
@@ -62,6 +71,7 @@ There are several Ansible [roles](./roles), each providing functionality for a
 different service:
 
 - [`common`](./roles/common): provides common variables (required by most roles).
+- [`aws`](./roles/asws): provides tasks for managing AWS infrastructure.
 - [`geth`](./roles/geth): provides tasks for managing Geth.
 - [`lighthouse`](./roles/lighthouse): provides tasks for managing Lighthouse.
 - [`rust`](./roles/rust): provides tasks for installing and upgrading Rust.
@@ -75,23 +85,16 @@ different service:
 Playbooks are run using the `ansible-playbook` CLI command. Here's an example:
 
 ```shell
-ansible-playbook -i testnet5 -l oregon migrate-from-docker-setup.yml
+ansible-playbook -i example-testnet infrastructure.yml
 ```
 
-This command will use the `testnet5` inventory file (`-i`) to find hosts, the
-action will be limited (`-l`) to nodes in the `oregon` group and it will run
-the tasks in the `migrate-from-docker-setup.yml`.
+This command will deploy all the infrastructure defined in `example-testnet`
+(some security groups and EC2 instances). Check to see that nodes were deployed
+with `ansible-inventory -i example-testnet/ --graph`.
 
 #### List of Plays
 
 Each play is listed here:
- - [migrate-from-docker-setup.yml](./migrate-from-docker-setup.yml): migrates a
-	 node running the
-	 [lighthouse-docker](https://github.com/sigp/lighthouse-docker) setup to a
-	 locally-compiled setup.
- - [provision.yml](./provision.yml): provisions Lighthouse and Geth services.
-	 Will pull the latest versions of each and build them. Will start the
-	 services after they have been built, however it will _not_ restart any
-	 existing services.
- - [restart.yml](./restart.yml): stops then starts the Lighthouse and Geth
-	 services. Does not delete any existing databases.
+ - [infrastructure.yml](./infrastructure.yml): deploys or updates the AWS infrastructure that forms the hosts.
+ - [packages.yml](./packages.yml): deploys or updates packages and configuration on hosts created by the above play.
+ - [kill-infrastructure.yml](./kill-infrastructure.yml): terminates all the running infrastructure (use with caution).

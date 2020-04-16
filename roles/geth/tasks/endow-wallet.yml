@@ -1,0 +1,12 @@
+---
+- name: Get address of eth1 wallet
+  script: "../scripts/geth_wallet_address.py {{ geth_keystore_dir }}"
+  register: wallet_script
+
+- name: dbg
+  debug:
+    var: wallet_script.stdout
+
+- name: Send ETH from local node
+  delegate_to: localhost
+  shell: "echo cats | geth attach ~/.ethereum/goerli/geth.ipc"

@@ -1,4 +1,13 @@
 ---
+- name: Install OS packages
+  become: yes
+  package:
+    name:
+      - git
+      - cmake
+      - clang
+      - openssl-devel
+    state: latest
 - name: Update sigp/lighthouse repo
   git:
     repo: "{{ lighthouse_repo_url }}"

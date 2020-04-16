@@ -1,22 +1,27 @@
 ---
-- name: Migrates a docker-compose node over to a compiled setup
+- name: Deploys packages and configuration to hosts
   hosts:
-    - boot_nodes
-    - validators
-    - developers
+    - beacon_node
   roles:
     - common
+    - aws
     - geth
     - rust
     - lighthouse
   gather_facts:
       false
+  vars_files:
+    - ./secret.yml
   tasks:
+    - name: Add keys to ssh/authorized_keys
+      include_tasks: roles/aws/tasks/authorized-keys.yml
+    - name: Create Eth1 Wallet
+      include_tasks: roles/geth/tasks/create-wallet.yml
     - name: Build Geth from source
       include_tasks: roles/geth/tasks/build-from-source.yml
     - name: Configure systemd for Geth
       include_tasks: roles/geth/tasks/configure-systemd.yml
-    - name: Start Geth systemd service
+    - name: Start Geth service
       include_tasks: roles/geth/tasks/start.yml
     - name: Install Rust
       include_tasks: roles/rust/tasks/install.yml
@@ -24,7 +29,5 @@
       include_tasks: roles/lighthouse/tasks/build-from-source.yml
     - name: Configure systemd for Lighthouse
       include_tasks: roles/lighthouse/tasks/configure-systemd.yml
-    - name: Start Beacon Node
-      include_tasks: roles/lighthouse/tasks/bn-start.yml
-    - name: Start Validator Client
-      include_tasks: roles/lighthouse/tasks/vc-start.yml
+    - name: Build lcli from source
+      include_tasks: roles/lighthouse/tasks/build-lcli-from-source.yml

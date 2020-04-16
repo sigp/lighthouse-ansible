@@ -1,8 +1,10 @@
 ---
-- name: yum install go
+- name: Install OS packages
   become: yes
-  yum:
-    name: go
+  package:
+    name:
+      - git
+      - go
     state: latest
 
 - name: Update geth repo
