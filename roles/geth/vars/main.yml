@@ -5,6 +5,6 @@ geth_goerli_data_dir: "{{ geth_data_dir }}/goerli"
 geth_ipc_endpoint: "{{ geth_goerli_data_dir }}/geth.ipc"
 geth_keystore_dir: "{{ geth_goerli_data_dir }}/keystore"
 geth_repo_version: "v1.9.12"
-geth_unlock_password_file: "{{ geth_keystore_dir }}/eth1password"
+geth_unlock_password_file: "{{ geth_goerli_data_dir }}/eth1password"
 geth_exec_start: "/usr/bin/geth --goerli"
 
