@@ -1,0 +1,44 @@
+---
+- name: Ensure ethereum Goerli datadir exists
+  file:
+    path: "{{ geth_keystore_dir }}"
+    state: directory
+
+- name: Deploy eth1password file
+  template:
+    src: ../templates/eth1password.j2
+    dest: "{{ geth_unlock_password_file }}"
+    force: no
+    mode: 0600
+
+- name: Get contents of keystore directory
+  find: 
+    paths: "{{ geth_keystore_dir }}"
+    file_type: file
+    patterns: "UTC*"
+  register: key_files
+
+- name:  Create first keystore
+  when: key_files.matched|int == 0
+  command: "geth account new --datadir {{ geth_goerli_data_dir }} --password {{ geth_goerli_data_dir }}/eth1password"
+
+- name: Get address of new keystore
+  when: key_files.matched|int == 0
+  script: "../scripts/geth_wallet_address.py {{ geth_keystore_dir }}"
+  register: wallet
+
+- name: Eth wallet address
+  when: key_files.matched|int == 0
+  debug:
+    var: wallet.stdout
+
+- name: Transfer eth from controller
+  when: key_files.matched|int == 0
+  delegate_to: localhost
+  script: "../scripts/transfer_eth.py {{ geth_ipc_endpoint }} {{ local_eth_address }} {{ wallet.stdout }} {{ eth_per_host }}"
+  register: tx
+
+- name: Transaction hash
+  when: key_files.matched|int == 0
+  debug:
+    var: tx.stdout

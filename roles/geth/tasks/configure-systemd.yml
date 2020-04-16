@@ -1,4 +1,8 @@
 ---
+- name: Get address of first Geth keystore
+  script: "../scripts/geth_wallet_address.py {{ geth_keystore_dir }}"
+  register: wallet
+
 - name: Deploy geth.service template
   become: yes
   template:

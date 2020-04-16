@@ -1,3 +1,8 @@
 testnet_tag: exampletestnet
 aws_regions: ["ap-southeast-1"]
 beacon_node_per_region: 1
+validators_per_host: 1
+# eth_allowance_per_validator: 3.2005
+eth_allowance_per_validator: 0.0001
+eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
+

@@ -8,10 +8,7 @@
   gather_facts:
       false
   vars_files:
-    - roles/geth/vars/secret.yml
-  vars:
-    validator_count: 2
-    eth_per_validator: 3.205
+    - ./secret.yml
   tasks:
     - name: Create Eth1 Wallet
       include_tasks: roles/geth/tasks/create-wallet.yml
