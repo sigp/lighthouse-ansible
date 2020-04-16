@@ -14,6 +14,6 @@
     dest: "{{ lighthouse_repo_dir }}"
     version: "{{ lighthouse_repo_branch }}"
 - name: Cargo install lighthouse
-  shell: '{{ home_dir }}/.cargo/bin/cargo install --path lighthouse --force'
+  shell: '{{ cargo_bin_dir }}/cargo install --path lighthouse --force'
   args:
     chdir: "{{ lighthouse_repo_dir }}"

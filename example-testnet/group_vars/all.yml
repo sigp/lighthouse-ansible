@@ -4,5 +4,16 @@ beacon_node_per_region: 1
 validators_per_host: 1
 eth_allowance_per_validator: 3.2005
 eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
+
+#
+# Testnet specs
+#
+
 deposit_contract_address: "0xfcfbb059c845eaead96b7b5531ab7157de9a9da1"
 deposit_contract_deploy_block: 2532176 
+eth1_follow_distance: 16
+min_genesis_time: 0
+min_genesis_delay: 3600
+genesis_fork_version: 0x000000
+min_genesis_active_validator_count: 1024
+deposit_adjustment_factor: 10
