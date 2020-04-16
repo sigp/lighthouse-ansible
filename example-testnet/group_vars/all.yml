@@ -5,3 +5,5 @@ validators_per_host: 1
 # eth_allowance_per_validator: 3.2005
 eth_allowance_per_validator: 0.0001
 eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
+deposit_contract_address: "0xfcfbb059c845eaead96b7b5531ab7157de9a9da1"
+deposit_contract_deploy_block: 2532176 

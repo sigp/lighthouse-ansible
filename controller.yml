@@ -35,9 +35,5 @@
       include_tasks: roles/geth/tasks/start.yml
     - name: Install Rust
       include_tasks: roles/rust/tasks/install.yml
-    - name: Build Lighthouse from source
-      include_tasks: roles/lighthouse/tasks/build-from-source.yml
-    - name: Configure systemd for Lighthouse
-      include_tasks: roles/lighthouse/tasks/configure-systemd.yml
     - name: Build lcli from source
       include_tasks: roles/lighthouse/tasks/build-lcli-from-source.yml

@@ -4,15 +4,7 @@
     repo: "{{ lighthouse_repo_url }}"
     dest: "{{ lighthouse_repo_dir }}"
     version: "{{ lighthouse_repo_branch }}"
-- name: Run cargo build
-  # Using `build` instead of `install` since it seems to handle
-  # builds that don't change easier.
-  shell: '~/.cargo/bin/cargo build --release --bin lcli'
+- name: Cargo install lcli
+  shell: '{{ home_dir }}/.cargo/bin/cargo install --path lcli --force'
   args:
     chdir: "{{ lighthouse_repo_dir }}"
-- name: Symlink target/release/lcli to /usr/bin
-  become: yes
-  file:
-    src: "{{ lighthouse_repo_dir }}/target/release/lcli"
-    dest: /usr/bin/lcli
-    state: link
