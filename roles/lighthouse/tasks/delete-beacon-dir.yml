@@ -1,0 +1,7 @@
+---
+- name: Remove local beacon dir
+  run_once: true
+  delegate_to: 127.0.0.1
+  file:
+    path: "{{ lighthouse_beacon_dir }}"
+    state: absent

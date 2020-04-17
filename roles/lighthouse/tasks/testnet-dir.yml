@@ -18,6 +18,8 @@
       - "{{ lighthouse_testnet_dir }}"
       - "--min-genesis-time"
       - "{{ min_genesis_time }}"
+      - "--min-genesis-active-validator-count"
+      - "{{ min_genesis_active_validator_count }}"
       - "--min-genesis-delay"
       - "{{ min_genesis_delay }}"
       - "--min-deposit-amount"

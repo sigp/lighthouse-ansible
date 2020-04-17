@@ -13,16 +13,12 @@
   gather_facts:
     false
   tasks:
-    - name: Configure systemd for Geth
-      include_tasks: roles/geth/tasks/configure-systemd.yml
-    - name: Stop Geth
-      include_tasks: roles/geth/tasks/stop.yml
-    - name: Start Geth
-      include_tasks: roles/geth/tasks/start.yml
     - name: Stop validator client
       include_tasks: roles/lighthouse/tasks/vc-stop.yml
     - name: Stop beacon node
       include_tasks: roles/lighthouse/tasks/bn-stop.yml
+    - name: Remove beacon database
+      include_tasks: roles/lighthouse/tasks/delete-beacon-dir.yml
     - name: Start beacon node
       include_tasks: roles/lighthouse/tasks/bn-start.yml
     - name: Start validator client
