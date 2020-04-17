@@ -1,6 +1,0 @@
----
-- name: Copy local testnet directory to host
-  copy:
-    src: "{{ lighthouse_testnet_dir }}"
-    dest: "{{ lighthouse_testnet_dir }}"
-    force: yes

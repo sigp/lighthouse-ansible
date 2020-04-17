@@ -1,0 +1,35 @@
+- name: Create security group
+  loop: "{{ aws_regions }}"
+  ec2_group:
+    name: "{{ testnet_tag }}"
+    description: "{{ testnet_tag }}"
+    region: "{{ item }}"
+    tags:
+      Owner: "{{ aws_owner }}"
+      Testnet: "{{ testnet_tag }}"
+    rules:
+      - proto: tcp
+        ports:
+          - 22
+        cidr_ip: 0.0.0.0/0
+        rule_desc: ssh
+      - proto: udp
+        ports:
+          - 9000
+        cidr_ip: 0.0.0.0/0
+        rule_desc: lighthouse-discv5
+      - proto: tcp
+        ports:
+          - 9000
+        cidr_ip: 0.0.0.0/0
+        rule_desc: lighthouse-libp2p
+      - proto: udp
+        ports:
+          - 30303
+        cidr_ip: 0.0.0.0/0
+        rule_desc: geth-discovery
+      - proto: tcp
+        ports:
+          - 30303
+        cidr_ip: 0.0.0.0/0
+        rule_desc: geth-devp2p

@@ -7,38 +7,13 @@
     aws_secret_key: "{{ ec2_secret_key }}"
     key_material: "{{ ec2_pubkey }}"
     force: no
-- name: Create security group
-  loop: "{{ aws_regions }}"
-  ec2_group:
-    name: "{{ testnet_tag }}"
-    description: "{{ testnet_tag }}"
-    region: "{{ item }}"
-    tags:
-      Owner: "{{ aws_owner }}"
-      Testnet: "{{ testnet_tag }}"
-    rules:
-      - proto: tcp
-        ports:
-          - 22
-        cidr_ip: 0.0.0.0/0
-        rule_desc: ssh
-      - proto: udp
-        ports:
-          - 9000
-        cidr_ip: 0.0.0.0/0
-        rule_desc: discv5
-      - proto: tcp
-        ports:
-          - 9000
-        cidr_ip: 0.0.0.0/0
-        rule_desc: libp2p
 - name: Launch AWS instances
   loop: "{{ aws_regions }}"
   ec2:
      key_name: "{{ aws_key_name }}"
      aws_access_key: "{{ ec2_access_key }}"
      aws_secret_key: "{{ ec2_secret_key }}"
-     instance_type: t2.medium
+     instance_type: "{{ instance_type }}"
      image: "{{ aws_ami_id }}"
      region: "{{ item }}"
      group: "{{ testnet_tag }}"
@@ -47,7 +22,7 @@
      volumes:
       - device_name: /dev/xvda
         volume_type: gp2
-        volume_size: 32
+        volume_size: "{{ volume_gb }}"
      count_tag:
         Testnet: "{{ testnet_tag }}"
         Role: "{{ role }}"

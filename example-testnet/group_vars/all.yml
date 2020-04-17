@@ -15,12 +15,36 @@ min_genesis_active_validator_count: 1024
 min_deposit_amount: "{{ 100000000 }}"
 max_effective_balance: "{{ 3200000000 }}"
 
+#
+# AWS EC2 config
+#
+
+# The regions in which we will deploy lighthouse nodes.
 aws_regions: ["ap-southeast-1"]
+
+# Beacon nodes only run a `lighthouse bn`.
 beacon_node_per_region: 1
+beacon_node_instance_type: t2.medium
+beacon_node_volume_size_gb: 32
+
+# Boots nodes only run a `lighthouse bn`, but their ENR are collected and
+# distributed with the testnet.
 boot_node_per_region: 1
+boot_node_instance_type: t2.medium
+boot_node_volume_size_gb: 32
+
+# Validator nodes run `lighthouse bn` and `lighthouse vc`.
 validator_per_region: 1
-validators_per_host: 1
-gwei_validator_deposit: "{{ max_effective_balance }}"
-eth_allowance_per_validator: 3.2005
+validator_instance_type: t2.medium
+validator_volume_size_gb: 32
+
+#
+# Validator config
+#
+
+validators_per_host: 1024
+validator_deposit_gwei: "{{ max_effective_balance }}"
+# Give some extra ETH for gas.
+eth_allowance_per_validator: 3.3
 eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
 

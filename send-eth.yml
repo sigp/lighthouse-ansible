@@ -1,0 +1,18 @@
+---
+- name: Transfer some ETH from the controller to a validator
+  roles:
+    - common
+    - geth
+  hosts:
+    - validator
+  vars_files:
+    - ./secret.yml
+  vars_prompt:
+    - name: eth_value
+      prompt: "How much ETH would you like to send?"
+      private: no
+  gather_facts:
+    false
+  tasks:
+    - name: Provide initial eth1 wallet and ETH
+      include_tasks: roles/geth/tasks/transfer-eth-from-controller.yml

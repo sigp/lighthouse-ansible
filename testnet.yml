@@ -1,0 +1,28 @@
+---
+- name: Create a testnet specification
+  roles:
+    - common
+    - geth
+    - lighthouse
+  hosts:
+    - beacon_node
+    - boot_node
+    - validator
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+    - name: Ensure Geth is started
+      include_tasks: roles/geth/tasks/start.yml
+    - name: Provision Lighthouse network keys
+      include_tasks: roles/lighthouse/tasks/network-keys.yml
+    - name: Define and distribute testnet dir
+      include_tasks: roles/lighthouse/tasks/testnet-dir.yml
+    - name: Start beacon node
+      include_tasks: roles/lighthouse/tasks/bn-start.yml
+    - name: Ensure validators are deposited
+      when: "'validator' in group_names"
+      include_tasks: roles/lighthouse/tasks/validators-deposit.yml
+    - name: Start validator client
+      include_tasks: roles/lighthouse/tasks/bn-start.yml

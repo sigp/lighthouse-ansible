@@ -1,0 +1,26 @@
+---
+- name: Create a testnet specification
+  roles:
+    - common
+    - geth
+    - lighthouse
+  hosts:
+    - beacon_node
+    - boot_node
+    - validator
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+    - name: Reload systemctl daemon
+      become: yes
+      command: systemctl daemon-reload
+    - name: Stop validator client
+      include_tasks: roles/lighthouse/tasks/vc-stop.yml
+    - name: Stop becaon node
+      include_tasks: roles/lighthouse/tasks/bn-stop.yml
+    - name: Start beacon node
+      include_tasks: roles/lighthouse/tasks/bn-start.yml
+    - name: Start validator client
+      include_tasks: roles/lighthouse/tasks/vc-start.yml

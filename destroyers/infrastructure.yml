@@ -6,6 +6,10 @@
     - aws
   vars_files:
     - ./secret.yml
+  vars_prompt:
+    - name: Confirm destroy
+      prompt: "Are you sure you wish to destroy the testnet?"
+      private: no
   tasks:
     - name: Terminate Instances
       include_tasks: roles/aws/tasks/ec2-terminate.yml

@@ -22,23 +22,8 @@
   when: key_files.matched|int == 0
   command: "geth account new --datadir {{ geth_goerli_data_dir }} --password {{ geth_goerli_data_dir }}/eth1password"
 
-- name: Get address of new keystore
+- name: Provide initial eth1 wallet and ETH
   when: key_files.matched|int == 0
-  script: "../scripts/geth_wallet_address.py {{ geth_keystore_dir }}"
-  register: wallet
-
-- name: Eth wallet address
-  when: key_files.matched|int == 0
-  debug:
-    var: wallet.stdout
-
-- name: Transfer eth from controller
-  when: key_files.matched|int == 0
-  delegate_to: localhost
-  script: "../scripts/transfer_eth.py {{ geth_ipc_endpoint }} {{ local_eth_address }} {{ wallet.stdout }} {{ eth_per_host }}"
-  register: tx
-
-- name: Transaction hash
-  when: key_files.matched|int == 0
-  debug:
-    var: tx.stdout
+  include_tasks: roles/geth/tasks/transfer-eth-from-controller.yml
+  vars:
+    eth_value: "{{ eth_per_host }}"

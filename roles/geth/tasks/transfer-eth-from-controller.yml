@@ -1,0 +1,13 @@
+---
+- name: Get address of keystore
+  script: "../scripts/geth_wallet_address.py {{ geth_keystore_dir }}"
+  register: wallet
+
+- name: Transfer eth from controller
+  delegate_to: localhost
+  script: "../scripts/transfer_eth.py {{ geth_ipc_endpoint }} {{ local_eth_address }} {{ wallet.stdout }} {{ eth_value }}"
+  register: tx
+
+- name: Transaction hash
+  debug:
+    var: tx.stdout
