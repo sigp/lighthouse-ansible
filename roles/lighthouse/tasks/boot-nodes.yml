@@ -1,0 +1,12 @@
+---
+- name: Read boot node ENR
+  when: "'boot_node' in group_names"
+  command:
+    cmd: "cat {{ lighthouse_enr_file }}"
+  register: enr
+
+- name: Ensure the ENR is included as a boot node
+  lineinfile:
+    path: "{{ lighthouse_testnet_enr_file }}"
+    line: {{ enr.stdout }}
+    state: present

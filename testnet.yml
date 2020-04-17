@@ -1,0 +1,17 @@
+---
+- name: Create a testnet specification
+  roles:
+    - common
+    - geth
+    - lighthouse
+  hosts:
+    - localhost
+    - beacon_node
+    - boot_node
+  vars_files:
+    - ./secret.yml
+  tasks:
+    - name: Provision network keys
+      include_tasks: roles/lighthouse/tasks/network-keys.yml
+    - name: Collect boot node ENR into testnet dir
+      include_tasks: roles/lighthouse/tasks/network-keys.yml
