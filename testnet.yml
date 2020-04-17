@@ -18,3 +18,5 @@
       include_tasks: roles/lighthouse/tasks/network-keys.yml
     - name: Collect boot node ENR into testnet dir
       include_tasks: roles/lighthouse/tasks/boot-nodes.yml
+    - name: Deploy locally-generated testnet dir
+      include_tasks: roles/lighthouse/tasks/remote-testnet-dir.yml
