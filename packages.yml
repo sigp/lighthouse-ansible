@@ -2,6 +2,7 @@
 - name: Deploys packages and configuration to hosts
   hosts:
     - beacon_node
+    - boot_node
   roles:
     - common
     - aws

@@ -5,13 +5,16 @@
     - geth
     - lighthouse
   hosts:
-    - localhost
     - beacon_node
     - boot_node
   vars_files:
     - ./secret.yml
+  gather_facts:
+    false
   tasks:
+    - name: Create testnet dir locally
+      include_tasks: roles/lighthouse/tasks/local-testnet-dir.yml
     - name: Provision network keys
       include_tasks: roles/lighthouse/tasks/network-keys.yml
     - name: Collect boot node ENR into testnet dir
-      include_tasks: roles/lighthouse/tasks/network-keys.yml
+      include_tasks: roles/lighthouse/tasks/boot-nodes.yml

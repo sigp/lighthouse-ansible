@@ -43,7 +43,7 @@
      region: "{{ item }}"
      group: "{{ testnet_tag }}"
      wait: true
-     exact_count: "{{ instances_per_region }}"
+     exact_count: "{{ instance_count }}"
      volumes:
       - device_name: /dev/xvda
         volume_type: gp2
