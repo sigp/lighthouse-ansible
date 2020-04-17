@@ -1,10 +1,4 @@
 testnet_tag: exampletestnet
-aws_regions: ["ap-southeast-1"]
-beacon_node_per_region: 1
-boot_node_per_region: 1
-validators_per_host: 1
-eth_allowance_per_validator: 3.2005
-eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
 
 #
 # Testnet specs
@@ -20,3 +14,13 @@ genesis_fork_version: "0x00000000"
 min_genesis_active_validator_count: 1024
 min_deposit_amount: "{{ 100000000 }}"
 max_effective_balance: "{{ 3200000000 }}"
+
+aws_regions: ["ap-southeast-1"]
+beacon_node_per_region: 1
+boot_node_per_region: 1
+validator_per_region: 1
+validators_per_host: 1
+gwei_validator_deposit: "{{ max_effective_balance }}"
+eth_allowance_per_validator: 3.2005
+eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
+

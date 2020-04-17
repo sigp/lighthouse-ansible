@@ -1,0 +1,65 @@
+---
+- name: Ensure local Lighthouse datadir exists
+  run_once: true
+  delegate_to: 127.0.0.1
+  file:
+    path: "{{ lighthouse_dir }}"
+    state: directory
+
+- debug:
+    var: lighthouse_testnet_dir
+
+- name: Use lcli to generate local testnet dir
+  run_once: true
+  delegate_to: 127.0.0.1
+  command:
+    creates: "{{ lighthouse_testnet_dir }}"
+    argv:
+      - "{{ lcli_bin }}"
+      - "new-testnet"
+      - "--testnet-dir"
+      - "{{ lighthouse_testnet_dir }}"
+      - "--min-genesis-time"
+      - "{{ min_genesis_time }}"
+      - "--min-genesis-delay"
+      - "{{ min_genesis_delay }}"
+      - "--min-deposit-amount"
+      - "{{ min_deposit_amount }}"
+      - "--max-effective-balance"
+      - "{{ max_effective_balance }}"
+      - "--eth1-follow-distance"
+      - "{{ eth1_follow_distance }}"
+      - "--genesis-fork-version"
+      - "{{ genesis_fork_version }}"
+      - "--deposit-contract-address"
+      - "{{ deposit_contract_address }}"
+      - "--deposit-contract-deploy-block"
+      - "{{ deposit_contract_deploy_block }}"
+
+- name: Read boot node ENR for hosts
+  when: "'boot_node' in group_names"
+  command:
+    cmd: "cat {{ lighthouse_enr_file }}"
+  register: enr
+
+- name: Ensure the ENR doesn't have an empty array
+  delegate_to: 127.0.0.1
+  when: "'boot_node' in group_names"
+  lineinfile:
+    path: "{{ lighthouse_testnet_enr_file }}"
+    line: "[]"
+    state: absent
+
+- name: Ensure the ENR is included in local boot_nodes.yml
+  delegate_to: 127.0.0.1
+  when: "'boot_node' in group_names"
+  lineinfile:
+    path: "{{ lighthouse_testnet_enr_file }}"
+    line: "- {{ enr.stdout }}"
+    state: present
+
+- name: Copy local testnet directory to host
+  copy:
+    src: "{{ lighthouse_testnet_dir }}"
+    dest: "{{ lighthouse_testnet_dir }}"
+    force: yes

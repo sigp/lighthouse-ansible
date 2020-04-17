@@ -3,6 +3,7 @@
   hosts:
     - beacon_node
     - boot_node
+    - validator
   roles:
     - common
     - aws
