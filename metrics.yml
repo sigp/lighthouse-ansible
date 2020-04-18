@@ -34,3 +34,8 @@
       vars:
         public_address: "{{ ansible_ec2_public_ipv4 }}" 
         private_address: "{{ ansible_default_ipv4.address }}" 
+
+    - name: Update DNS records
+      include_tasks: roles/aws/tasks/route53-a-record.yml
+      vars:
+        ip_address: "{{ ansible_ec2_public_ipv4 }}" 

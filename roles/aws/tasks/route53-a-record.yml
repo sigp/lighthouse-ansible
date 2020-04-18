@@ -1,0 +1,11 @@
+- name: Create Route53 A-record for metrics server
+  delegate_to: localhost
+  route53:
+    state: present
+    zone: "{{ metrics_domain_zone }}"
+    record: "{{ metrics_domain_record }}"
+    type: A
+    ttl: 7200
+    value: "{{ ip_address }}"
+    # Wait until changes have been replicated.
+    wait: yes
