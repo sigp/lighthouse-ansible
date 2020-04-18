@@ -5,8 +5,8 @@ testnet_tag: unity-4k
 #
 
 # Address is _without_ 0x prefix.
-deposit_contract_address: "fcfbb059c845eaead96b7b5531ab7157de9a9da1"
-deposit_contract_deploy_block: 2532176 
+deposit_contract_address: "251e7790c3cff2a03987d9bc855138ee846b60b6"
+deposit_contract_deploy_block: 2544688 
 eth1_follow_distance: 16
 min_genesis_time: 0
 min_genesis_delay: 3600

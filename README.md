@@ -103,9 +103,25 @@ Each play is listed here:
 
 In this example we're going to start a new testnet called "unity-4k".
 
-_Note: don't use hypens in testnet names. Ansible does not enjoy that._
+### 0. Deploy deposit contract
 
-### 1. Define Inventory
+If the deposit contract is not yet deployed, you can deploy it with:
+
+```bash
+ansible-playbook deploy-deposit-contract.yml
+```
+
+It'll wait for 3 block confirmations then print something like:
+
+```
+ok: [localhost] => {
+    "contract.stdout": "deposit_contract_address: 0x251e7790c3cff2a03987d9bc855138ee846b60b6\ndeposit_contract_deploy_block: 2544688"
+}
+```
+
+Take note of these variables, they'll be required in the next step.
+
+### 1. Define inventory
 
 Create a new inventory directory by copying an existing one (e.g., `example-testnet`):
 
@@ -128,17 +144,19 @@ running a BN (16 nodes in total).
 
 So, we'll set:
 
+- `deposit_contract_address: "251e7790c3cff2a03987d9bc855138ee846b60b6"` (see step 0)
+- `deposit_contract_deploy_block: 2544688` (see step 0)
 - `min_genesis_active_validator_count: 4096`
 - `public_node_regions: ["ap-southeast-1", "eu-central-1", "us-west-2", "ap-south-1"]`
 - `beacon_node_per_region: 0`
 - `boot_node_per_region: 2`
 - `validator_per_region: 2`
 
-To ensure an even split of validators at genesis, also set:
+To ensure an even split of validators at genesis, we'll also set:
 
 - `validators_per_host: 512`
 
-Since I added three new regions, I also need to reflect this in the `regions`
+Since we added three new regions, we also need to reflect this in the `regions`
 list in `unity-4k/hosts.aws_ec2.yml`:
 
 ```yaml
