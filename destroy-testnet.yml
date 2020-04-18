@@ -11,17 +11,6 @@
       prompt: "Are you sure you wish to DESTROY THE TESTNET? Enter to continue or Ctrl+C to abort"
       private: no
   tasks:
-    - name: Terminate public node instances
-      include_tasks: roles/aws/tasks/ec2-terminate.yml
-      vars:
-        regions: "{{ public_node_regions }}"
-
-    - name: Terminate metrics instance
-      include_tasks: roles/aws/tasks/ec2-terminate.yml
-      vars:
-        regions:
-          - "{{ metrics_server_region }}"
-
     - name: Delete nodes security group
       loop: "{{ public_node_regions }}"
       ec2_group:
@@ -34,6 +23,17 @@
         region: "{{ metrics_server_region }}"
         name: "{{ security_group_metrics }}"
         state: absent
+
+    - name: Terminate public node instances
+      include_tasks: roles/aws/tasks/ec2-terminate.yml
+      vars:
+        regions: "{{ public_node_regions }}"
+
+    - name: Terminate metrics instance
+      include_tasks: roles/aws/tasks/ec2-terminate.yml
+      vars:
+        regions:
+          - "{{ metrics_server_region }}"
 
     - name: Get metrics server domain info
       route53:

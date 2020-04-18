@@ -9,16 +9,29 @@
     key_material: "{{ ec2_pubkey }}"
     force: no
 
-- name: Launch AWS instances
+- name: Copy EC2 AMI image to current region
   loop: "{{ regions }}"
+  ec2_ami_copy:
+    source_region: "{{ aws_ami_region }}"
+    region: "{{ item }}"
+    source_image_id: "{{ aws_ami_id }}"
+    tags:
+        Name: "{{ aws_ami_id }}"
+    tag_equality: yes
+  register: copy
+
+- name: Launch AWS instances
+  # Zip the list of regions with the list of AMI IDs we just generated and loop
+  # them together.
+  loop: "{{ regions|zip(copy.results)|list }}"
   ec2:
      key_name: "{{ aws_key_name }}"
      aws_access_key: "{{ ec2_access_key }}"
      aws_secret_key: "{{ ec2_secret_key }}"
      instance_type: "{{ instance_type }}"
-     image: "{{ aws_ami_id }}"
-     region: "{{ item }}"
-     group: "{{ testnet_tag }}"
+     image: "{{ item.1.image_id }}"
+     region: "{{ item.0 }}"
+     group: "{{ security_group }}"
      wait: true
      exact_count: "{{ instance_count }}"
      volumes:

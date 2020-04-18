@@ -40,3 +40,9 @@
       include_tasks: roles/aws/tasks/route53-a-record.yml
       vars:
         ip_address: "{{ ansible_ec2_public_ipv4 }}" 
+
+    - name: Provision Caddy webserver
+      include_tasks: roles/caddy/tasks/provision.yml
+
+    - name: Start Caddy
+      include_tasks: roles/caddy/tasks/start.yml
