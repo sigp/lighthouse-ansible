@@ -1,0 +1,8 @@
+caddy_bin: "{{ home_dir }}/go/bin/caddy"
+
+caddy_config_dir: "/etc/caddy"
+caddyfile: "{{ caddy_config_dir }}/Caddyfile"
+
+caddy_repo_url: "https://github.com/caddyserver/caddy.git"
+caddy_repo_dir: "{{ home_dir }}/caddy"
+caddy_repo_version: "v1.0.5"

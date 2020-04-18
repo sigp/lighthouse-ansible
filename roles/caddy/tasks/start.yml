@@ -1,8 +1,8 @@
 ---
-- name: Start and enable the Geth service
+- name: Start and enable the Caddy service
   become: yes
   systemd:
-    name: geth
+    name: caddy
     state: started
     enabled: yes
     daemon-reload: yes

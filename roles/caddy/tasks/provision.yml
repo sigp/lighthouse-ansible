@@ -1,0 +1,43 @@
+---
+- name: Install OS packages
+  become: yes
+  package:
+    name:
+      - git
+      - go
+    state: latest
+
+- name: Update Caddy repo
+  git:
+    repo: "{{ caddy_repo_url }}"
+    dest: "{{ caddy_repo_dir }}"
+    version: "{{ caddy_repo_version }}"
+
+- name: Build Caddy from source
+  command: go install
+  args:
+    chdir: "{{ caddy_repo_dir }}/caddy"
+
+- name: Ensure Caddy config dir exists
+  become: yes
+  file:
+    path: "{{ caddy_config_dir }}"
+    state: directory
+
+- name: Provision Caddyfile
+  become: yes
+  template:
+    src: ../templates/Caddyfile.j2
+    dest: "{{ caddyfile }}"
+    force: yes
+
+- name: Deploy caddy.service
+  become: yes
+  template:
+    src: ../templates/caddy.service.j2
+    dest: /etc/systemd/system/caddy.service
+    force: yes
+
+- name: Reload systemctl daemon
+  become: yes
+  command: systemctl daemon-reload

@@ -4,6 +4,7 @@
   roles:
     - common
     - aws
+    - caddy
     - cloudalchemy.prometheus
     - cloudalchemy.grafana
   vars_files:
