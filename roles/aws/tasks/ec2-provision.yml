@@ -27,6 +27,6 @@
         volume_size: "{{ volume_gb }}"
      count_tag:
         Testnet: "{{ testnet_tag }}"
-        Role: "{{ role }}"
+        CountId: "{{ count_id_tag }}"
      instance_tags: "{{ tags }}"
   register: ec2

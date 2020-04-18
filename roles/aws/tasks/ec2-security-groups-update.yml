@@ -1,0 +1,19 @@
+---
+- name: Open up nodes security group to metrics server
+  loop: "{{ public_node_regions }}"
+  delegate_to: localhost
+  ec2_group:
+    name: "{{ security_group_nodes }}"
+    description: "Public-facing Lighthouse nodes for {{ testnet_tag }}"
+    region: "{{ item }}"
+    tags:
+      Owner: "{{ aws_owner }}"
+      Testnet: "{{ testnet_tag }}"
+    # Do not delete any existing rules
+    purge_rules: False
+    rules:
+      - proto: tcp
+        ports:
+          - 5052
+        cidr_ip: "{{ address }}/32"
+        rule_desc: lighthouse-http-api from metrics server

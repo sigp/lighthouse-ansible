@@ -1,4 +1,8 @@
 ---
+- name: Get public IP of controller
+  ipify_facts:
+  connection: local
+
 - name: Create security group for public nodes
   loop: "{{ public_node_regions }}"
   ec2_group:
@@ -24,6 +28,11 @@
           - 9000
         cidr_ip: 0.0.0.0/0
         rule_desc: lighthouse-libp2p
+      - proto: tcp
+        ports:
+          - 5052
+        cidr_ip: "{{ ipify_public_ip }}/32"
+        rule_desc: lighthouse-http-api from ansible controller
       - proto: udp
         ports:
           - 30303
@@ -49,3 +58,13 @@
           - 22
         cidr_ip: 0.0.0.0/0
         rule_desc: ssh
+      - proto: tcp
+        ports:
+          - 80
+        cidr_ip: 0.0.0.0/0
+        rule_desc: http
+      - proto: tcp
+        ports:
+          - 443
+        cidr_ip: 0.0.0.0/0
+        rule_desc: https

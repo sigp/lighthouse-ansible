@@ -19,5 +19,5 @@ keyed_groups:
     separator: ''
   - key: tags['geth']
     separator: ''
-  - key: tags['metrics-server']
+  - key: tags['metrics_server']
     separator: ''

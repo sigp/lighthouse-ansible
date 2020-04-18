@@ -1,11 +1,27 @@
 ---
 - name: Provision Prometheus Metrics
   hosts: metrics_server
-  gather_facts: False
+  roles:
+    - common
+    - aws
+    - cloudalchemy.prometheus
+    - cloudalchemy.grafana
+  vars_files:
+    - ./secret.yml
   vars:
     prometheus_targets:
       node:
-      - targets: "{{ groups['lighthouse_bn'] }}"
+      # Add a target for each beacon node for port 5052.
+      - targets: "{{ groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:5052') | list +
+                     groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:9010') | list }}"
+    grafana_security:
+      admin_user: admin
+      admin_password: "{{  default_grafana_password }}"
+
   tasks:
-    - debug:
-        var: prometheus_targets
+    - ec2_metadata_facts:
+
+    - name: Update security groups
+      include_tasks: roles/aws/tasks/ec2-security-groups-update.yml
+      vars:
+        address: "{{ ansible_ec2_public_ipv4 }}" 
