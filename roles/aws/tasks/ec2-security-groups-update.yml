@@ -15,5 +15,10 @@
       - proto: tcp
         ports:
           - 5052
-        cidr_ip: "{{ address }}/32"
-        rule_desc: lighthouse-http-api from metrics server
+        cidr_ip: "{{ public_address }}/32"
+        rule_desc: lighthouse-http-api from metrics server (public addr)
+      - proto: tcp
+        ports:
+          - 5052
+        cidr_ip: "{{ private_address }}/32"
+        rule_desc: lighthouse-http-api from metrics server (private addr)
