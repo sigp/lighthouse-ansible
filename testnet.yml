@@ -5,24 +5,34 @@
     - geth
     - lighthouse
   hosts:
-    - beacon_node
-    - boot_node
-    - validator
+    - lighthouse_bn
+    - lighthouse_vc
+    - geth
   vars_files:
     - ./secret.yml
   gather_facts:
     false
   tasks:
     - name: Ensure Geth is started
+      when: "'geth in group_names'"
       include_tasks: roles/geth/tasks/start.yml
+
     - name: Provision Lighthouse network keys
+      when: "'lighthouse_bn in group_names'"
       include_tasks: roles/lighthouse/tasks/network-keys.yml
+
     - name: Define and distribute testnet dir
+      when: "'lighthouse_bn in group_names'"
       include_tasks: roles/lighthouse/tasks/testnet-dir.yml
+
     - name: Start beacon node
+      when: "'lighthouse_bn in group_names'"
       include_tasks: roles/lighthouse/tasks/bn-start.yml
+
     - name: Ensure validators are deposited
-      when: "'validator' in group_names"
+      when: "'lighthouse_vc in group_names'"
       include_tasks: roles/lighthouse/tasks/validators-deposit.yml
+
     - name: Start validator client
+      when: "'lighthouse_vc in group_names'"
       include_tasks: roles/lighthouse/tasks/bn-start.yml

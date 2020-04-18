@@ -28,8 +28,5 @@
      count_tag:
         Testnet: "{{ testnet_tag }}"
         Role: "{{ role }}"
-     instance_tags:
-        Owner: "{{ aws_owner }}"
-        Testnet: "{{ testnet_tag }}"
-        Role: "{{ role }}"
+     instance_tags: "{{ tags }}"
   register: ec2

@@ -11,6 +11,13 @@ keyed_groups:
   # Create a group per region e.g. aws_region_us_east_2
   - key: placement.region
     prefix: region
-  - key: tags['Role']
-    # Using separator gets rid of a leading underscore
+  - key: tags['lighthouse_bn']
+    separator: ''
+  - key: tags['lighthouse_boot_node']
+    separator: ''
+  - key: tags['lighthouse_vc']
+    separator: ''
+  - key: tags['geth']
+    separator: ''
+  - key: tags['metrics-server']
     separator: ''

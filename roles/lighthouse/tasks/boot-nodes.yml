@@ -1,21 +1,18 @@
 ---
 - name: Read boot node ENR for hosts
-  when: "'boot_node' in group_names"
   command:
     cmd: "cat {{ lighthouse_enr_file }}"
   register: enr
 
-- name: Ensure the ENR doesn't have an empty array
+- name: Ensure the local nodes list doesn't contain an empty array
   delegate_to: 127.0.0.1
-  when: "'boot_node' in group_names"
   lineinfile:
     path: "{{ lighthouse_testnet_enr_file }}"
     line: "[]"
     state: absent
 
-- name: Ensure the ENR is included in local boot_nodes.yml
+- name: Ensure the host ENR is included in local boot_nodes.yml
   delegate_to: 127.0.0.1
-  when: "'boot_node' in group_names"
   lineinfile:
     path: "{{ lighthouse_testnet_enr_file }}"
     line: "- {{ enr.stdout }}"

@@ -1,11 +1,11 @@
 ---
 - name: Provision Prometheus Metrics
-  hosts: metrics
+  hosts: metrics_server
   gather_facts: False
   vars:
     prometheus_targets:
       node:
-      - targets: "{{ groups['beacon_node'] }}"
+      - targets: "{{ groups['lighthouse_bn'] }}"
   tasks:
     - debug:
         var: prometheus_targets

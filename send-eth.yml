@@ -4,7 +4,7 @@
     - common
     - geth
   hosts:
-    - validator
+    - lighthouse_vc
   vars_files:
     - ./secret.yml
   vars_prompt:

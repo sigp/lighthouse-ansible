@@ -13,7 +13,12 @@
 
     - name: Provision boot_node ec2 instances
       vars:
-        role: "boot_node"
+        tags:
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          lighthouse_bn: lighthouse_bn
+          lighthouse_boot_node: lighthouse_boot_node
+          geth: geth
         regions: "{{ public_node_regions }}"
         instance_count: "{{ boot_node_per_region }}"
         instance_type: "{{ boot_node_instance_type }}"
@@ -23,7 +28,11 @@
 
     - name: Provision beacon_node ec2 instances
       vars:
-        role: "beacon_node"
+        tags:
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          lighthouse_bn: lighthouse_bn
+          geth: geth
         regions: "{{ public_node_regions }}"
         instance_count: "{{ beacon_node_per_region }}"
         instance_type: "{{ beacon_node_instance_type }}"
@@ -33,7 +42,12 @@
 
     - name: Provision validator ec2 instances
       vars:
-        role: "validator"
+        tags:
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          lighthouse_bn: lighthouse_bn
+          lighthouse_vc: lighthouse_vc
+          geth: geth
         regions: "{{ public_node_regions }}"
         instance_count: "{{ validator_per_region }}"
         instance_type: "{{ validator_instance_type }}"
@@ -43,7 +57,10 @@
 
     - name: Provision metrics server instance
       vars:
-        role: "metrics"
+        tags:
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          metrics_server: metrics_server
         regions:
           - "{{ metrics_server_region }}"
         instance_count: 1
