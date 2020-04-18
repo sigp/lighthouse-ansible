@@ -14,9 +14,17 @@
       # Add a target for each beacon node for port 5052.
       - targets: "{{ groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:5052') | list +
                      groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:9010') | list }}"
+
     grafana_security:
       admin_user: admin
       admin_password: "{{  default_grafana_password }}"
+
+    grafana_datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: 'http://localhost:9090'
+        basicAuth: false
 
   tasks:
     - ec2_metadata_facts:
