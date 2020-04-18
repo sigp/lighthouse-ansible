@@ -10,24 +10,44 @@
   tasks:
     - name: Configure security groups
       include_tasks: roles/aws/tasks/ec2-security-groups.yml
+
     - name: Provision boot_node ec2 instances
       vars:
         role: "boot_node"
+        regions: "{{ public_node_regions }}"
         instance_count: "{{ boot_node_per_region }}"
         instance_type: "{{ boot_node_instance_type }}"
         volume_gb: "{{ boot_node_volume_size_gb }}"
+        security_group: "{{ security_group_nodes }}"
       include_tasks: roles/aws/tasks/ec2-provision.yml
+
     - name: Provision beacon_node ec2 instances
       vars:
         role: "beacon_node"
+        regions: "{{ public_node_regions }}"
         instance_count: "{{ beacon_node_per_region }}"
         instance_type: "{{ beacon_node_instance_type }}"
         volume_gb: "{{ beacon_node_volume_size_gb }}"
+        security_group: "{{ security_group_nodes }}"
       include_tasks: roles/aws/tasks/ec2-provision.yml
+
     - name: Provision validator ec2 instances
       vars:
         role: "validator"
+        regions: "{{ public_node_regions }}"
         instance_count: "{{ validator_per_region }}"
         instance_type: "{{ validator_instance_type }}"
         volume_gb: "{{ validator_volume_size_gb }}"
+        security_group: "{{ security_group_nodes }}"
+      include_tasks: roles/aws/tasks/ec2-provision.yml
+
+    - name: Provision metrics server instance
+      vars:
+        role: "metrics"
+        regions:
+          - "{{ metrics_server_region }}"
+        instance_count: 1
+        instance_type: "{{ metrics_instance_type }}"
+        volume_gb: "{{ metrics_volume_size_gb }}"
+        security_group: "{{ security_group_metrics }}"
       include_tasks: roles/aws/tasks/ec2-provision.yml

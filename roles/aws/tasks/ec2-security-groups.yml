@@ -1,8 +1,9 @@
-- name: Create security group
-  loop: "{{ aws_regions }}"
+---
+- name: Create security group for public nodes
+  loop: "{{ public_node_regions }}"
   ec2_group:
-    name: "{{ testnet_tag }}"
-    description: "{{ testnet_tag }}"
+    name: "{{ security_group_nodes }}"
+    description: "Public-facing Lighthouse nodes for {{ testnet_tag }}"
     region: "{{ item }}"
     tags:
       Owner: "{{ aws_owner }}"
@@ -33,3 +34,18 @@
           - 30303
         cidr_ip: 0.0.0.0/0
         rule_desc: geth-devp2p
+
+- name: Create security group for metrics server
+  ec2_group:
+    name: "{{ security_group_metrics }}"
+    description: "Metrics server for {{ testnet_tag }}"
+    region: "{{ metrics_server_region }}"
+    tags:
+      Owner: "{{ aws_owner }}"
+      Testnet: "{{ testnet_tag }}"
+    rules:
+      - proto: tcp
+        ports:
+          - 22
+        cidr_ip: 0.0.0.0/0
+        rule_desc: ssh

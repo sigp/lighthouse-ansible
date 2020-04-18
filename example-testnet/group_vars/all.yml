@@ -20,7 +20,13 @@ max_effective_balance: "{{ 3200000000 }}"
 #
 
 # The regions in which we will deploy lighthouse nodes.
-aws_regions: ["ap-southeast-1"]
+#
+# Each region will effectively be a replica.
+public_node_regions: ["ap-southeast-1"]
+
+# Security group names
+security_group_nodes: "{{ testnet_tag}}-nodes"
+security_group_metrics: "{{ testnet_tag}}-metrics"
 
 # Beacon nodes only run a `lighthouse bn`.
 beacon_node_per_region: 1
@@ -37,6 +43,11 @@ boot_node_volume_size_gb: 32
 validator_per_region: 1
 validator_instance_type: t2.medium
 validator_volume_size_gb: 32
+
+# Metrics (Grafana + Prometheus)
+metrics_server_region: ap-southeast-1
+metrics_instance_type: t2.small
+metrics_volume_size_gb: 32
 
 #
 # Validator config
