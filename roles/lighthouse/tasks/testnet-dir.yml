@@ -26,6 +26,8 @@
       - "{{ min_deposit_amount }}"
       - "--max-effective-balance"
       - "{{ max_effective_balance }}"
+      - "--effective-balance-increment"
+      - "{{ effective_balance_increment }}"
       - "--eth1-follow-distance"
       - "{{ eth1_follow_distance }}"
       - "--genesis-fork-version"
@@ -36,7 +38,7 @@
       - "{{ deposit_contract_deploy_block }}"
 
 - name: Collect boot node ENR
-  when: "'lighthouse_boot_node' in group_names'"
+  when: "'lighthouse_boot_node' in group_names"
   include_tasks: roles/lighthouse/tasks/network-keys.yml
 
 - name: Copy local testnet directory to host

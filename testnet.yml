@@ -21,6 +21,10 @@
       when: "'lighthouse_bn in group_names'"
       include_tasks: roles/lighthouse/tasks/network-keys.yml
 
+    - name: Collect boot nodes
+      when: "'lighthouse_boot_node in group_names'"
+      include_tasks: roles/lighthouse/tasks/boot-nodes.yml
+
     - name: Define and distribute testnet dir
       when: "'lighthouse_bn in group_names'"
       include_tasks: roles/lighthouse/tasks/testnet-dir.yml

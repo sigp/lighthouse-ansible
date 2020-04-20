@@ -2,3 +2,5 @@ testnet5
 secret.yml
 /aws
 *.swp
+*mapfile.yml
+paul-scratch-pad*

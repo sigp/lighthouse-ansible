@@ -12,7 +12,7 @@
       - "account"
       - "validator"
       - "deposited"
-      - "--datadir"
+      - "--validator-dir"
       - "{{ lighthouse_validators_dir }}"
       - "--eth1-ipc"
       - "{{ geth_ipc_endpoint }}"
@@ -20,6 +20,6 @@
       - "{{ wallet.stdout }}"
       - "--deposit-gwei"
       - "{{ validator_deposit_gwei }}"
-      - "--limit"
+      - "--at-least"
       - "{{ validators_per_host }}"
   register: deposit

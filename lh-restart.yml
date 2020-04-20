@@ -2,7 +2,6 @@
 - name: Create a testnet specification
   roles:
     - common
-    - geth
     - lighthouse
   hosts:
     - lighthouse_bn
@@ -17,15 +16,11 @@
       include_tasks: roles/lighthouse/tasks/vc-stop.yml
 
     - name: Stop beacon node
-      when: "'lighthouse_bn' in group_names"
+      when: "'lighthouse_bn' in group_names or 'lighthouse_vc' in group_names"
       include_tasks: roles/lighthouse/tasks/bn-stop.yml
 
-    - name: Remove beacon database
-      when: "'lighthouse_bn' in group_names"
-      include_tasks: roles/lighthouse/tasks/delete-beacon-dir.yml
-
     - name: Start beacon node
-      when: "'lighthouse_bn' in group_names"
+      when: "'lighthouse_bn' in group_names or 'lighthouse_vc' in group_names"
       include_tasks: roles/lighthouse/tasks/bn-start.yml
 
     - name: Start validator client
