@@ -13,9 +13,7 @@
   tasks:
 
     - name: Build Lighthouse from source
-      when: "'lighthouse_bn' in group_names or 'lighthouse_vc' in group_names"
       include_tasks: roles/lighthouse/tasks/build-from-source.yml
 
     - name: Configure systemd for Lighthouse
-      when: "'lighthouse_bn' in group_names or 'lighthouse_vc' in group_names"
       include_tasks: roles/lighthouse/tasks/configure-systemd.yml

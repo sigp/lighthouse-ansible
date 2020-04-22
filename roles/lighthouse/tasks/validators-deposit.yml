@@ -20,6 +20,6 @@
       - "{{ wallet.stdout }}"
       - "--deposit-gwei"
       - "{{ validator_deposit_gwei }}"
-      - "--at-least"
+      - "--at-most"
       - "{{ validators_per_host }}"
   register: deposit
