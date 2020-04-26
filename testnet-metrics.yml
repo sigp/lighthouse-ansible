@@ -12,9 +12,9 @@
   vars:
     prometheus_targets:
       node:
-      # Add a target for each beacon node for port 5052.
+      # Add a target for each beacon node for port 5052 (lighthouse) and one for 9100 (node-exporter).
       - targets: "{{ groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:5052') | list +
-                     groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:9010') | list }}"
+                     groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:9100') | list }}"
 
     grafana_security:
       admin_user: admin

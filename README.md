@@ -108,7 +108,7 @@ In this example we're going to start a new testnet called "unity-4k".
 If the deposit contract is not yet deployed, you can deploy it with:
 
 ```bash
-ansible-playbook deploy-deposit-contract.yml
+ansible-playbook utils-deploy-deposit-contract.yml
 ```
 
 It'll wait for 3 block confirmations then print something like:

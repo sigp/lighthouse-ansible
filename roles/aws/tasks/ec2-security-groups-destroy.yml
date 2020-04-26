@@ -1,0 +1,13 @@
+---
+- name: Delete security group for public nodes
+  loop: "{{ public_node_regions }}"
+  ec2_group:
+    name: "{{ security_group_nodes }}"
+    region: "{{ item }}"
+    state: absent
+
+- name: Delete security group for metrics server
+  ec2_group:
+    name: "{{ security_group_metrics }}"
+    region: "{{ metrics_server_region }}"
+    state: absent

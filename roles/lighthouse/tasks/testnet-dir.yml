@@ -39,7 +39,7 @@
 
 - name: Collect boot node ENR
   when: "'lighthouse_boot_node' in group_names"
-  include_tasks: roles/lighthouse/tasks/network-keys.yml
+  include_tasks: roles/lighthouse/tasks/boot-nodes.yml
 
 - name: Copy local testnet directory to host
   copy:

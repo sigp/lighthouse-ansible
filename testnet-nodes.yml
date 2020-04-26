@@ -11,8 +11,7 @@
     - geth
     - rust
     - lighthouse
-  gather_facts:
-      false
+    - cloudalchemy.node-exporter
   vars_files:
     - ./secret.yml
   tasks:

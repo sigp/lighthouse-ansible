@@ -27,4 +27,4 @@
 
     - name: Start validator client
       when: "'lighthouse_vc in group_names'"
-      include_tasks: roles/lighthouse/tasks/bn-start.yml
+      include_tasks: roles/lighthouse/tasks/vc-start.yml

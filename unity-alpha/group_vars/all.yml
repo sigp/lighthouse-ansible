@@ -1,20 +1,20 @@
-testnet_tag: unity-4k
+testnet_tag: unity-alpha
 
 #
 # Testnet specs
 #
 
 # Address is _without_ 0x prefix.
-deposit_contract_address: "251e7790c3cff2a03987d9bc855138ee846b60b6"
-deposit_contract_deploy_block: 2544688 
+deposit_contract_address: "0a73d5478a04a819a3444eaa8d62d88a37a0e491"
+deposit_contract_deploy_block: 2565791 
 eth1_follow_distance: 16
 min_genesis_time: 0
 min_genesis_delay: 3600
 genesis_fork_version: "0x00000000"
-min_genesis_active_validator_count: 4096
-min_deposit_amount: "{{ 100000000 }}"
-max_effective_balance: "{{ 3200000000 }}"
-effective_balance_increment: "{{ 100000000 }}"
+min_genesis_active_validator_count: 16384
+min_deposit_amount: 100000000
+max_effective_balance: 3200000000
+effective_balance_increment: 100000000
 
 #
 # AWS EC2 config
@@ -54,7 +54,7 @@ metrics_volume_size_gb: 32
 # Validator config
 #
 
-validators_per_host: 512
+validators_per_host: 2048
 validator_deposit_gwei: "{{ max_effective_balance }}"
 # Give some extra ETH for gas.
 eth_allowance_per_validator: 3.3

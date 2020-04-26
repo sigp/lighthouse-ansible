@@ -2,7 +2,7 @@
   import_playbook: testnet-infrastructure.yml
 
 - name: Install software on nodes
-  import_playbook: testnet-packages.yml
+  import_playbook: testnet-nodes.yml
 
 - name: Configure the metrics server
   import_playbook: testnet-metrics.yml

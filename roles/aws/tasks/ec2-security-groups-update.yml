@@ -22,3 +22,13 @@
           - 5052
         cidr_ip: "{{ private_address }}/32"
         rule_desc: lighthouse-http-api from metrics server (private addr)
+      - proto: tcp
+        ports:
+          - 9100
+        cidr_ip: "{{ public_address }}/32"
+        rule_desc: node-exporter from metrics server (public addr)
+      - proto: tcp
+        ports:
+          - 9100
+        cidr_ip: "{{ private_address }}/32"
+        rule_desc: node-exporter from metrics server (private addr)
