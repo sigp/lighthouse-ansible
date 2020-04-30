@@ -1,9 +1,12 @@
 ---
-- name: Destroys all infrastructure for a testnet
+- name: Destroys all infrastructure for a testnet and refunds deposit contract
   hosts: localhost
   gather_facts: False
   roles:
     - aws
+    - lighthouse
+    - common
+    - geth
   vars_files:
     - ./secret.yml
   vars_prompt:
@@ -42,3 +45,7 @@
           ttl: "{{ domain.set.ttl }}"
           type: "{{ domain.set.type }}"
           value: "{{ domain.set.value }}"
+
+    - name: Refund deposit contract
+      command: 
+        cmd: "{{ cargo_bin_dir }}/lcli refund-deposit-contract --eth1-ipc {{ geth_ipc_endpoint }} --from-address {{ local_eth_address }} --contract-address {{ deposit_contract_address }}"
