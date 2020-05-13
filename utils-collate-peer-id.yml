@@ -1,0 +1,24 @@
+---
+- name: Collect host peer ids into mapfile
+  roles:
+    - common
+  hosts:
+    - lighthouse_bn
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+   - name: Read boot node ENR for hosts
+     command:
+       cmd: "curl localhost:5052/network/peer_id"
+       warn: False
+     register: peer_id
+   
+   - name: Include the PeerId mapping file
+     delegate_to: 127.0.0.1
+     lineinfile:
+       path: "./{{ testnet_tag }}-peerid-mapfile.yml"
+       line: "- {{ inventory_hostname}}: {{ peer_id.stdout }}"
+       state: present
+       create: yes

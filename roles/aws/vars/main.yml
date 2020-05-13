@@ -1,2 +1,8 @@
+# This is the resource ID of an AMI image.
+#
+# It was the first option at the top of the list on 18/04/2020.
 aws_ami_id: "ami-0ec225b5e01ccb706"
+# AMI are contstrained to a single region. During deployment we copy this AMI to other regions.
+aws_ami_region: "ap-southeast-1"
+
 aws_owner: "lighthouse-ansible"

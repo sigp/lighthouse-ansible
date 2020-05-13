@@ -1,0 +1,5 @@
+---
+- name: Remove beacon dir
+  file:
+    path: "{{ lighthouse_beacon_dir }}"
+    state: absent

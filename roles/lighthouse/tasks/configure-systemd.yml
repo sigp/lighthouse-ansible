@@ -5,12 +5,14 @@
     src: ../templates/lighthouse-bn.service.j2
     dest: /etc/systemd/system/lighthouse-bn.service
     force: yes
+
 - name: Deploy lighthouse-vc.service template
   become: yes
   template:
     src: ../templates/lighthouse-vc.service.j2
     dest: /etc/systemd/system/lighthouse-vc.service
     force: yes
+
 - name: Reload systemctl daemon
   become: yes
   command: systemctl daemon-reload

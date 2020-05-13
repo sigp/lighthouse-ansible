@@ -1,0 +1,39 @@
+---
+- name: Ensure local Lighthouse datadir exists
+  run_once: true
+  delegate_to: 127.0.0.1
+  file:
+    path: "{{ lighthouse_dir }}"
+    state: directory
+
+- debug:
+    var: lighthouse_testnet_dir
+
+- name: Use lcli to generate local testnet dir
+  run_once: true
+  delegate_to: 127.0.0.1
+  command:
+    creates: "{{ lighthouse_testnet_dir }}"
+    argv:
+      - "{{ lcli_bin }}"
+      - "new-testnet"
+      - "--testnet-dir"
+      - "{{ lighthouse_testnet_dir }}"
+      - "--min-genesis-time"
+      - "{{ min_genesis_time }}"
+      - "--min-genesis-delay"
+      - "{{ min_genesis_delay }}"
+      - "--min-deposit-amount"
+      - "{{ min_deposit_amount }}"
+      - "--max-effective-balance"
+      - "{{ max_effective_balance }}"
+      - "--ejection-balance"
+      - "{{ ejection_balance }}"
+      - "--eth1-follow-distance"
+      - "{{ eth1_follow_distance }}"
+      - "--genesis-fork-version"
+      - "{{ genesis_fork_version }}"
+      - "--deposit-contract-address"
+      - "{{ deposit_contract_address }}"
+      - "--deposit-contract-deploy-block"
+      - "{{ deposit_contract_deploy_block }}"

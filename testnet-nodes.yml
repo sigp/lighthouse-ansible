@@ -1,0 +1,47 @@
+---
+- name: Deploys packages and configuration to hosts
+  hosts:
+    - lighthouse_bn
+    - lighthouse_vc
+    - geth
+    - metrics_server
+  roles:
+    - common
+    - aws
+    - geth
+    - rust
+    - lighthouse
+    - cloudalchemy.node-exporter
+  vars_files:
+    - ./secret.yml
+  tasks:
+    - name: Add keys to ssh/authorized_keys
+      include_tasks: roles/aws/tasks/authorized-keys.yml
+
+    - name: Build Geth from source
+      when: "'geth' in group_names"
+      include_tasks: roles/geth/tasks/build-from-source.yml
+
+    - name: Configure systemd for Geth
+      when: "'geth' in group_names"
+      include_tasks: roles/geth/tasks/configure-systemd.yml
+
+    - name: Start Geth service
+      when: "'geth' in group_names"
+      include_tasks: roles/geth/tasks/start.yml
+
+    - name: Install Rust
+      when: "'lighthouse_bn' in group_names or 'lighthouse_vc' in group_names"
+      include_tasks: roles/rust/tasks/install.yml
+
+    - name: Build lcli from source
+      when: "'lighthouse_bn' in group_names"
+      include_tasks: roles/lighthouse/tasks/build-lcli-from-source.yml
+
+    - name: Build Lighthouse from source
+      when: "'lighthouse_bn' in group_names or 'lighthouse_vc' in group_names"
+      include_tasks: roles/lighthouse/tasks/build-from-source.yml
+
+    - name: Configure systemd for Lighthouse
+      when: "'lighthouse_bn' in group_names or 'lighthouse_vc' in group_names"
+      include_tasks: roles/lighthouse/tasks/configure-systemd.yml

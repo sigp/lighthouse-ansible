@@ -1,0 +1,30 @@
+---
+- name: Deposit the validators and start the nodes
+  roles:
+    - common
+    - geth
+    - lighthouse
+  hosts:
+    - lighthouse_bn
+    - lighthouse_vc
+    - geth
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+    - name: Start Geth
+      when: "'geth' in group_names"
+      include_tasks: roles/geth/tasks/start.yml
+
+    - name: Start beacon node
+      when: "'lighthouse_bn in group_names'"
+      include_tasks: roles/lighthouse/tasks/bn-start.yml
+
+    - name: Ensure validators are deposited
+      when: "'lighthouse_vc in group_names'"
+      include_tasks: roles/lighthouse/tasks/validators-deposit.yml
+
+    - name: Start validator client
+      when: "'lighthouse_vc in group_names'"
+      include_tasks: roles/lighthouse/tasks/vc-start.yml

@@ -1,6 +1,24 @@
 ---
+- name: Get address of first Geth keystore
+  when: "'lighthouse_vc' in group_names"
+  script: "../scripts/geth_wallet_address.py {{ geth_keystore_dir }}"
+  register: wallet
+
 - name: Deploy geth.service template
+  when: "'lighthouse_vc' in group_names"
   become: yes
+  vars:
+    unlock_flags: "--unlock 0x{{ wallet.stdout }} --password {{ geth_unlock_password_file }}"
+  template:
+    src: ../templates/geth.service.j2
+    dest: /etc/systemd/system/geth.service
+    force: yes
+
+- name: Deploy geth.service template
+  when: "'lighthouse_vc' not in group_names"
+  become: yes
+  vars:
+    unlock_flags: ""
   template:
     src: ../templates/geth.service.j2
     dest: /etc/systemd/system/geth.service

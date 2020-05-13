@@ -1,0 +1,19 @@
+---
+- name: Create a testnet specification
+  roles:
+    - common
+    - lighthouse
+  hosts:
+    - lighthouse_bn
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+    - name: Stop beacon node
+      when: "'lighthouse_bn' in group_names"
+      include_tasks: roles/lighthouse/tasks/bn-stop.yml
+
+    - name: Start beacon node
+      when: "'lighthouse_bn' in group_names"
+      include_tasks: roles/lighthouse/tasks/bn-start.yml

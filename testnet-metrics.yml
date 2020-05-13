@@ -1,0 +1,48 @@
+---
+- name: Provision Prometheus Metrics
+  hosts: metrics_server
+  roles:
+    - common
+    - aws
+    - caddy
+    - cloudalchemy.prometheus
+    - cloudalchemy.grafana
+  vars_files:
+    - ./secret.yml
+  vars:
+    prometheus_targets:
+      node:
+      # Add a target for each beacon node for port 5052 (lighthouse) and one for 9100 (node-exporter).
+      - targets: "{{ groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:5052') | list +
+                     groups['lighthouse_bn'] | map('regex_replace', '(.*)', '\\1:9100') | list }}"
+
+    grafana_security:
+      admin_user: admin
+      admin_password: "{{  default_grafana_password }}"
+
+    grafana_datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: 'http://localhost:9090'
+        basicAuth: false
+
+  tasks:
+    - ec2_metadata_facts:
+
+    - name: Update security groups
+      include_tasks: roles/aws/tasks/ec2-security-groups-update.yml
+      vars:
+        public_address: "{{ ansible_ec2_public_ipv4 }}" 
+        private_address: "{{ ansible_default_ipv4.address }}" 
+
+    - name: Update DNS records
+      include_tasks: roles/aws/tasks/route53-a-record.yml
+      vars:
+        ip_address: "{{ ansible_ec2_public_ipv4 }}" 
+
+    - name: Provision Caddy webserver
+      include_tasks: roles/caddy/tasks/provision.yml
+
+    - name: Start Caddy
+      include_tasks: roles/caddy/tasks/start.yml

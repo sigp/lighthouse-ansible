@@ -1,0 +1,22 @@
+---
+- name: Ensure Lighthouse datadir exists
+  file:
+    path: "{{ lighthouse_dir }}"
+    state: directory
+
+- ec2_metadata_facts:
+
+- name: Create network directory
+  command:
+    creates: "{{ lighthouse_network_dir }}"
+    argv:
+      - "{{ cargo_bin_dir }}/lcli"
+      - "generate-bootnode-enr"
+      - "--output-dir"
+      - "{{ lighthouse_network_dir }}"
+      - "--ip"
+      - "{{ ansible_ec2_public_ipv4 }}"
+      - "--udp-port"
+      - "9000"
+      - "--tcp-port"
+      - "9000"

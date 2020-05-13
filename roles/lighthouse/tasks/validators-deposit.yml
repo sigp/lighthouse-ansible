@@ -1,0 +1,27 @@
+---
+- name: Get address of first keystore
+  when: "'lighthouse_vc' in group_names"
+  script: "../../geth/scripts/geth_wallet_address.py {{ geth_keystore_dir }}"
+  register: wallet
+
+- name: Create and deposit validators
+  when: "'lighthouse_vc' in group_names"
+  command:
+    argv:
+      - "{{ lighthouse_bin }}"
+      - "--testnet-dir"
+      - "{{ lighthouse_testnet_dir }}"
+      - "account"
+      - "validator"
+      - "deposited"
+      - "--validator-dir"
+      - "{{ lighthouse_validators_dir }}"
+      - "--eth1-ipc"
+      - "{{ geth_ipc_endpoint }}"
+      - "--from-address"
+      - "{{ wallet.stdout }}"
+      - "--deposit-gwei"
+      - "{{ validator_deposit_gwei }}"
+      - "--at-most"
+      - "{{ validators_per_host }}"
+  register: deposit

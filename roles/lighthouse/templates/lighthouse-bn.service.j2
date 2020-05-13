@@ -5,6 +5,7 @@ After=syslog.target network.target
 [Service]
 User={{ ansible_user }}
 Type=simple
+Environment="RUST_BACKTRACE={{ rust_backtrace }}"
 ExecStart={{ lighthouse_bn_exec_start }}
 KillMode=process
 KillSignal=SIGINT

@@ -1,0 +1,21 @@
+---
+- name: Create a testnet specification and distribute it
+  roles:
+    - common
+    - lighthouse
+  hosts:
+    - lighthouse_bn
+    - lighthouse_vc
+    - lighthouse_boot_node
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+    - name: Create Lighthouse network keys
+      when: "'lighthouse_bn in group_names'"
+      include_tasks: roles/lighthouse/tasks/network-keys.yml
+
+    - name: Define and distribute testnet dir
+      when: "'lighthouse_bn in group_names'"
+      include_tasks: roles/lighthouse/tasks/testnet-dir.yml

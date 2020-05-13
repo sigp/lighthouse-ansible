@@ -1,0 +1,39 @@
+---
+- name: Configures the Ansible controller
+  hosts:
+    - localhost
+  roles:
+    - common
+    - aws
+    - geth
+    - rust
+    - lighthouse
+  gather_facts:
+      false
+  vars_files:
+    - ./secret.yml
+  tasks:
+    - name: Install OS packages
+      become: yes
+      package:
+        name:
+          - git
+          - go
+          - python3
+          - python3-pip
+        state: latest
+    - name: Install pip packages
+      pip:
+        name: web3
+        extra_args: --user
+        executable: pip3
+    - name: Build Geth from source
+      include_tasks: roles/geth/tasks/build-from-source.yml
+    - name: Configure systemd for Geth
+      include_tasks: roles/geth/tasks/configure-systemd.yml
+    - name: Start Geth service
+      include_tasks: roles/geth/tasks/start.yml
+    - name: Install Rust
+      include_tasks: roles/rust/tasks/install.yml
+    - name: Build lcli from source
+      include_tasks: roles/lighthouse/tasks/build-lcli-from-source.yml

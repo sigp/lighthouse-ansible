@@ -5,7 +5,7 @@ After=syslog.target network.target
 [Service]
 User={{ ansible_user }}
 Type=simple
-ExecStart={{ geth_exec_start }}
+ExecStart=/usr/bin/geth --rpc --allow-insecure-unlock --goerli {{ unlock_flags }}
 KillMode=process
 KillSignal=SIGINT
 TimeoutStopSec=90

@@ -1,5 +1,6 @@
-- name: Create lighthouse-ansible keypair
-  loop: "{{ aws_regions }}"
+---
+- name: Ensure lighthouse-ansible keypair exists
+  loop: "{{ regions }}"
   ec2_key:
     name: "{{ aws_key_name }}"
     region: "{{ item }}"
@@ -7,20 +8,38 @@
     aws_secret_key: "{{ ec2_secret_key }}"
     key_material: "{{ ec2_pubkey }}"
     force: no
+
+- name: Copy EC2 AMI image to current region
+  loop: "{{ regions }}"
+  ec2_ami_copy:
+    source_region: "{{ aws_ami_region }}"
+    region: "{{ item }}"
+    source_image_id: "{{ aws_ami_id }}"
+    tags:
+        Name: "{{ aws_ami_id }}"
+    tag_equality: yes
+  register: copy
+
 - name: Launch AWS instances
-  loop: "{{ aws_regions }}"
+  # Zip the list of regions with the list of AMI IDs we just generated and loop
+  # them together.
+  loop: "{{ regions|zip(copy.results)|list }}"
   ec2:
      key_name: "{{ aws_key_name }}"
      aws_access_key: "{{ ec2_access_key }}"
      aws_secret_key: "{{ ec2_secret_key }}"
-     instance_type: t2.micro
-     image: "{{ aws_ami_id }}"
-     region: "{{ item }}"
+     instance_type: "{{ instance_type }}"
+     image: "{{ item.1.image_id }}"
+     region: "{{ item.0 }}"
+     group: "{{ security_group }}"
      wait: true
-     exact_count: "{{ instances_per_aws_region }}"
+     exact_count: "{{ instance_count }}"
+     volumes:
+      - device_name: /dev/xvda
+        volume_type: gp2
+        volume_size: "{{ volume_gb }}"
      count_tag:
-        testnet: "{{ testnet_tag }}"
-     instance_tags:
-        Owner: "{{ aws_owner }}"
-        testnet: "{{ testnet_tag }}"
+        Testnet: "{{ testnet_tag }}"
+        CountId: "{{ count_id_tag }}"
+     instance_tags: "{{ tags }}"
   register: ec2

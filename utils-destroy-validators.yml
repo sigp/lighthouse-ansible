@@ -1,0 +1,32 @@
+---
+- name: Deletes all data directories
+  roles:
+    - common
+    - geth
+    - lighthouse
+  hosts:
+    - lighthouse_vc
+  gather_facts:
+      false
+  vars_files:
+    - ./secret.yml
+  vars_prompt:
+    - name: Confirm destroy
+      prompt: "Are you sure you wish to DESTROY THE VALIDATORS? Enter to continue or Ctrl+C to abort"
+      private: no
+  tasks:
+
+    - name: Remove local validators datadir
+      file:
+        path: "{{ lighthouse_validators_dir }}"
+        state: absent
+
+    - name: Remove geth keystore
+      file:
+        path: "{{ geth_keystore_dir }}"
+        state: absent
+
+    - name: Re-create empty keystore dir
+      file:
+        path: "{{ geth_keystore_dir }}"
+        state: directory

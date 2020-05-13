@@ -1,0 +1,12 @@
+#
+# This playbook is useful for restarting an existing testnet with a new
+# min_genesis_time. This gives us a fresh testnet but with the same
+# deposit contract and validator keys.
+#
+
+---
+- import_playbook: lh-drop-db.yml
+
+- import_playbook: testnet-specification.yml
+
+- import_playbook: testnet-start.yml

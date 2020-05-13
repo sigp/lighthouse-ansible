@@ -1,0 +1,20 @@
+---
+- name: Configures the Ansible controller
+  roles:
+    - common
+    - geth
+    - lighthouse
+  hosts:
+    - localhost
+  gather_facts:
+      false
+  vars_files:
+    - ./secret.yml
+  tasks:
+    - name: Deploy deposit contract
+      command: 
+        cmd: "{{ cargo_bin_dir }}/lcli deploy-deposit-contract --eth1-ipc {{ geth_ipc_endpoint }} --from-address {{ local_eth_address }}"
+      register: contract
+    - name: Display deposit contract info
+      debug:
+        var: contract.stdout

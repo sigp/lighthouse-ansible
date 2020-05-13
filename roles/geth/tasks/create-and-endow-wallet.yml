@@ -1,0 +1,31 @@
+---
+- name: Ensure ethereum Goerli datadir exists
+  file:
+    path: "{{ geth_keystore_dir }}"
+    state: directory
+
+- name: Deploy eth1password file
+  template:
+    src: ../templates/eth1password.j2
+    dest: "{{ geth_unlock_password_file }}"
+    force: no
+    mode: 0600
+
+- name: Get contents of keystore directory
+  find: 
+    paths: "{{ geth_keystore_dir }}"
+    file_type: file
+    patterns: "UTC*"
+  register: key_files
+
+- name:  Create first keystore
+  when: key_files.matched|int == 0
+  command: "geth account new --datadir {{ geth_goerli_data_dir }} --password {{ geth_goerli_data_dir }}/eth1password"
+
+- name: Provide initial eth1 wallet and ETH
+  when:
+    - key_files.matched|int == 0
+    - "'lighthouse_vc' in group_names"
+  include_tasks: roles/geth/tasks/transfer-eth-from-controller.yml
+  vars:
+    eth_value: "{{ eth_per_host }}"

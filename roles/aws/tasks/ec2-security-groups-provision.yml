@@ -1,0 +1,70 @@
+---
+- name: Get public IP of controller
+  ipify_facts:
+  connection: local
+
+- name: Create security group for public nodes
+  loop: "{{ public_node_regions }}"
+  ec2_group:
+    name: "{{ security_group_nodes }}"
+    description: "Public-facing Lighthouse nodes for {{ testnet_tag }}"
+    region: "{{ item }}"
+    tags:
+      Owner: "{{ aws_owner }}"
+      Testnet: "{{ testnet_tag }}"
+    rules:
+      - proto: tcp
+        ports:
+          - 22
+        cidr_ip: 0.0.0.0/0
+        rule_desc: ssh
+      - proto: udp
+        ports:
+          - 9000
+        cidr_ip: 0.0.0.0/0
+        rule_desc: lighthouse-discv5
+      - proto: tcp
+        ports:
+          - 9000
+        cidr_ip: 0.0.0.0/0
+        rule_desc: lighthouse-libp2p
+      - proto: tcp
+        ports:
+          - 5052
+        cidr_ip: "{{ ipify_public_ip }}/32"
+        rule_desc: lighthouse-http-api from ansible controller
+      - proto: udp
+        ports:
+          - 30303
+        cidr_ip: 0.0.0.0/0
+        rule_desc: geth-discovery
+      - proto: tcp
+        ports:
+          - 30303
+        cidr_ip: 0.0.0.0/0
+        rule_desc: geth-devp2p
+
+- name: Create security group for metrics server
+  ec2_group:
+    name: "{{ security_group_metrics }}"
+    description: "Metrics server for {{ testnet_tag }}"
+    region: "{{ metrics_server_region }}"
+    tags:
+      Owner: "{{ aws_owner }}"
+      Testnet: "{{ testnet_tag }}"
+    rules:
+      - proto: tcp
+        ports:
+          - 22
+        cidr_ip: 0.0.0.0/0
+        rule_desc: ssh
+      - proto: tcp
+        ports:
+          - 80
+        cidr_ip: 0.0.0.0/0
+        rule_desc: http
+      - proto: tcp
+        ports:
+          - 443
+        cidr_ip: 0.0.0.0/0
+        rule_desc: https

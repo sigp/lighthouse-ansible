@@ -1,0 +1,19 @@
+---
+- name: Update repo and rebuild Lighthouse
+  roles:
+    - common
+    - lighthouse
+  hosts:
+    - lighthouse_bn
+    - lighthouse_vc
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+
+    - name: Build Lighthouse from source
+      include_tasks: roles/lighthouse/tasks/build-from-source.yml
+
+    - name: Configure systemd for Lighthouse
+      include_tasks: roles/lighthouse/tasks/configure-systemd.yml

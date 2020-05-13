@@ -1,0 +1,86 @@
+---
+- name: Creates a new testnet with new EC2 instances
+  hosts:
+    - localhost
+  gather_facts: False
+  roles:
+    - aws
+  vars_files:
+    - ./secret.yml
+  tasks:
+    - name: Configure security groups
+      include_tasks: roles/aws/tasks/ec2-security-groups-provision.yml
+
+    - name: Provision boot_node ec2 instances
+      vars:
+        count_id: lh_boot_node
+        tags:
+          Name: "{{ testnet_tag }}_{{ count_id }}"
+          CountId: "{{ count_id }}"
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          lighthouse_bn: lighthouse_bn
+          lighthouse_boot_node: lighthouse_boot_node
+          geth: geth
+        count_id_tag: "{{ count_id }}"
+        regions: "{{ public_node_regions }}"
+        instance_count: "{{ boot_node_per_region }}"
+        instance_type: "{{ boot_node_instance_type }}"
+        volume_gb: "{{ boot_node_volume_size_gb }}"
+        security_group: "{{ security_group_nodes }}"
+      include_tasks: roles/aws/tasks/ec2-provision.yml
+
+    - name: Provision beacon_node ec2 instances
+      vars:
+        count_id: lh_beacon_node
+        tags:
+          Name: "{{ testnet_tag }}_{{ count_id }}"
+          CountId: "{{ count_id }}"
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          lighthouse_bn: lighthouse_bn
+          geth: geth
+        count_id_tag: "{{ count_id }}"
+        regions: "{{ public_node_regions }}"
+        instance_count: "{{ beacon_node_per_region }}"
+        instance_type: "{{ beacon_node_instance_type }}"
+        volume_gb: "{{ beacon_node_volume_size_gb }}"
+        security_group: "{{ security_group_nodes }}"
+      include_tasks: roles/aws/tasks/ec2-provision.yml
+
+    - name: Provision validator ec2 instances
+      vars:
+        count_id: lh_validator_client
+        tags:
+          Name: "{{ testnet_tag }}_{{ count_id }}"
+          CountId: "{{ count_id }}"
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          lighthouse_bn: lighthouse_bn
+          lighthouse_vc: lighthouse_vc
+          geth: geth
+        count_id_tag: "{{ count_id }}"
+        regions: "{{ public_node_regions }}"
+        instance_count: "{{ validator_per_region }}"
+        instance_type: "{{ validator_instance_type }}"
+        volume_gb: "{{ validator_volume_size_gb }}"
+        security_group: "{{ security_group_nodes }}"
+      include_tasks: roles/aws/tasks/ec2-provision.yml
+
+    - name: Provision metrics server instance
+      vars:
+        count_id: lh_metrics_server
+        tags:
+          Name: "{{ testnet_tag }}_{{ count_id }}"
+          CountId: "{{ count_id }}"
+          Owner: "{{ aws_owner }}"
+          Testnet: "{{ testnet_tag }}"
+          metrics_server: metrics_server
+        count_id_tag: "{{ count_id }}"
+        regions:
+          - "{{ metrics_server_region }}"
+        instance_count: 1
+        instance_type: "{{ metrics_instance_type }}"
+        volume_gb: "{{ metrics_volume_size_gb }}"
+        security_group: "{{ security_group_metrics }}"
+      include_tasks: roles/aws/tasks/ec2-provision.yml
