@@ -22,10 +22,6 @@
       when: "'geth' in group_names"
       include_tasks: roles/geth/tasks/build-from-source.yml
 
-    - name: Provide initial eth1 wallet and ETH
-      when: "'lighthouse_vc' in group_names"
-      include_tasks: roles/geth/tasks/create-and-endow-wallet.yml
-
     - name: Configure systemd for Geth
       when: "'geth' in group_names"
       include_tasks: roles/geth/tasks/configure-systemd.yml

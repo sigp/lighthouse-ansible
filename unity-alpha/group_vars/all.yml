@@ -5,16 +5,17 @@ testnet_tag: unity-alpha
 #
 
 # Address is _without_ 0x prefix.
-deposit_contract_address: "0a73d5478a04a819a3444eaa8d62d88a37a0e491"
-deposit_contract_deploy_block: 2565791 
+deposit_contract_address: "33fe91c4d6653c1c6f3e87edfe5264c446f017c1"
+deposit_contract_deploy_block: 2613138 
 eth1_follow_distance: 16
-min_genesis_time: 0
+min_genesis_time: 1588810000
 min_genesis_delay: 3600
 genesis_fork_version: "0x00000000"
 min_genesis_active_validator_count: 16384
 min_deposit_amount: 100000000
 max_effective_balance: 3200000000
 effective_balance_increment: 100000000
+ejection_balance: 1600000000
 
 #
 # AWS EC2 config
@@ -63,7 +64,7 @@ eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
 #
 # Lightouse source
 #
-lighthouse_repo_branch: "testnet-corrections"
+lighthouse_repo_branch: "master"
 
 #
 # Lightouse debugging

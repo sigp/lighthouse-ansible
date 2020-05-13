@@ -1,5 +1,5 @@
 ---
-- name: Restart Lighthouse BN & VC
+- name: Stop Lighthouse BN & VC
   roles:
     - common
     - lighthouse
@@ -11,19 +11,10 @@
   gather_facts:
     false
   tasks:
-    - name: Push systemd config
-      include_tasks: roles/lighthouse/tasks/configure-systemd.yml
-
     - name: Stop validator client
       when: "'lighthouse_vc' in group_names"
       include_tasks: roles/lighthouse/tasks/vc-stop.yml
 
     - name: Stop beacon node
+      when: "'lighthouse_bn' in group_names"
       include_tasks: roles/lighthouse/tasks/bn-stop.yml
-
-    - name: Start beacon node
-      include_tasks: roles/lighthouse/tasks/bn-start.yml
-
-    - name: Start validator client
-      when: "'lighthouse_vc' in group_names"
-      include_tasks: roles/lighthouse/tasks/vc-start.yml

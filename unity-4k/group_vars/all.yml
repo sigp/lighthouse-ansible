@@ -15,6 +15,7 @@ min_genesis_active_validator_count: 4096
 min_deposit_amount: "{{ 100000000 }}"
 max_effective_balance: "{{ 3200000000 }}"
 effective_balance_increment: "{{ 100000000 }}"
+ejection_balance: 1600000000
 
 #
 # AWS EC2 config

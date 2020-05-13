@@ -49,3 +49,8 @@
     - name: Refund deposit contract
       command: 
         cmd: "{{ cargo_bin_dir }}/lcli refund-deposit-contract --eth1-ipc {{ geth_ipc_endpoint }} --from-address {{ local_eth_address }} --contract-address {{ deposit_contract_address }}"
+
+    - name: Remove local Lighthouse datadir
+      file:
+        path: "{{ lighthouse_testnet_dir }}"
+        state: absent

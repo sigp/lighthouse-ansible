@@ -27,6 +27,8 @@
       - "{{ min_deposit_amount }}"
       - "--max-effective-balance"
       - "{{ max_effective_balance }}"
+      - "--ejection-balance"
+      - "{{ ejection_balance }}"
       - "--eth1-follow-distance"
       - "{{ eth1_follow_distance }}"
       - "--genesis-fork-version"

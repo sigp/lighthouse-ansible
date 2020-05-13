@@ -1,5 +1,5 @@
-- name: Deploy AWS infrastructure
-  import_playbook: testnet-infrastructure.yml
+- name: Provision ETH
+  import_playbook: testnet-deploy-eth.yml
 
 - name: Install software on nodes
   import_playbook: testnet-nodes.yml

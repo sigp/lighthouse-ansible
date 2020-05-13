@@ -1,0 +1,14 @@
+---
+- name: Stop Lighthouse Geth service
+  roles:
+    - common
+    - geth
+  hosts:
+    - geth
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+    - name: Stop Geth
+      include_tasks: roles/geth/tasks/stop.yml

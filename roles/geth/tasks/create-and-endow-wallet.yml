@@ -23,7 +23,9 @@
   command: "geth account new --datadir {{ geth_goerli_data_dir }} --password {{ geth_goerli_data_dir }}/eth1password"
 
 - name: Provide initial eth1 wallet and ETH
-  when: key_files.matched|int == 0
+  when:
+    - key_files.matched|int == 0
+    - "'lighthouse_vc' in group_names"
   include_tasks: roles/geth/tasks/transfer-eth-from-controller.yml
   vars:
     eth_value: "{{ eth_per_host }}"
