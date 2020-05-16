@@ -14,8 +14,17 @@
     path: "{{ lighthouse_testnet_dir }}"
     state: absent
 
+# Synchronize two directories on one remote host.
+- name: Copy existing testnet dir
+  when: localhost_source_testnet_dir is defined
+  delegate_to: 127.0.0.1
+  synchronize:
+    src: "{{ localhost_source_testnet_dir }}"
+    dest: "{{ lighthouse_testnet_dir }}"
+
 - name: Use lcli to generate local testnet dir
   run_once: true
+  when: localhost_source_testnet_dir is not defined
   delegate_to: 127.0.0.1
   command:
     creates: "{{ lighthouse_testnet_dir }}"
@@ -48,7 +57,7 @@
       - "{{ deposit_contract_deploy_block }}"
 
 - name: Collect boot node ENR
-  when: "'lighthouse_boot_node' in group_names"
+  when: 'lighthouse_boot_node' in group_names and localhost_source_testnet_dir is not defined
   include_tasks: roles/lighthouse/tasks/boot-nodes.yml
 
 - name: Copy local testnet directory to host

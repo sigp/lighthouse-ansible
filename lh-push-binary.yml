@@ -1,0 +1,19 @@
+---
+- name: Distribute pre-built Lighthouse Binary
+  roles:
+    - common
+    - lighthouse
+  hosts:
+    - lighthouse_bn
+    - lighthouse_vc
+  vars_files:
+    - ./secret.yml
+  gather_facts:
+    false
+  tasks:
+
+    - name: Push prebuilt binary
+      include_tasks: roles/lighthouse/tasks/distribute-binary.yml
+
+    - name: Configure systemd for Lighthouse
+      include_tasks: roles/lighthouse/tasks/configure-systemd.yml

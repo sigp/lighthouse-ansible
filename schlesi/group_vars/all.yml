@@ -1,21 +1,13 @@
-testnet_tag: unity-alpha
+testnet_tag: schlesi
 
 #
 # Testnet specs
 #
 
 # Address is _without_ 0x prefix.
-deposit_contract_address: "33fe91c4d6653c1c6f3e87edfe5264c446f017c1"
-deposit_contract_deploy_block: 2613138 
-eth1_follow_distance: 16
-min_genesis_time: 1588810000
-min_genesis_delay: 3600
-genesis_fork_version: "0x00000000"
-min_genesis_active_validator_count: 16384
-min_deposit_amount: 100000000
-max_effective_balance: 3200000000
-effective_balance_increment: 100000000
-ejection_balance: 1600000000
+deposit_contract_address: "A15554BF93a052669B511ae29EA21f3581677ac5"
+
+localhost_source_testnet_dir: "/home/ec2-user/schlesi/light"
 
 #
 # AWS EC2 config
@@ -31,18 +23,18 @@ security_group_nodes: "{{ testnet_tag}}-nodes"
 security_group_metrics: "{{ testnet_tag}}-metrics"
 
 # Beacon nodes only run a `lighthouse bn`.
-beacon_node_per_region: 0
+beacon_node_per_region: 2
 beacon_node_instance_type: t2.medium
 beacon_node_volume_size_gb: 32
 
 # Boots nodes only run a `lighthouse bn`, but their ENR are collected and
 # distributed with the testnet.
-boot_node_per_region: 2
+boot_node_per_region: 0
 boot_node_instance_type: t2.medium
 boot_node_volume_size_gb: 32
 
 # Validator nodes run `lighthouse bn` and `lighthouse vc`.
-validator_per_region: 2
+validator_per_region: 0
 validator_instance_type: t2.medium
 validator_volume_size_gb: 32
 
@@ -55,10 +47,10 @@ metrics_volume_size_gb: 32
 # Validator config
 #
 
-validators_per_host: 2048
+validators_per_host: 2
 validator_deposit_gwei: "{{ max_effective_balance }}"
 # Give some extra ETH for gas.
-eth_allowance_per_validator: 3.3
+eth_allowance_per_validator: 32.1
 eth_per_host: "{{ validators_per_host * eth_allowance_per_validator }}"
 
 #

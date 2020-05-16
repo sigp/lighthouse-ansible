@@ -1,0 +1,6 @@
+---
+- name: Distribute pre-built lighthouse binary
+  copy:
+    src: "{{ local_prebuilt_binary_dir }}/lighthouse"
+    dest: "{{ lighthouse_bin }}"
+    force: yes

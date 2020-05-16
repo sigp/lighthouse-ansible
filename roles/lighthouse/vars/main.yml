@@ -17,3 +17,5 @@ lighthouse_vc_exec_start: "{{ lighthouse_bin}} --debug-level {{ lighthouse_debug
 
 lighthouse_repo_url: "https://github.com/sigp/lighthouse.git"
 lighthouse_repo_dir: "{{ home_dir }}/lighthouse"
+
+local_prebuilt_binary_dir: "/home/ec2-user/prebuilt-binaries"
