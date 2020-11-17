@@ -56,26 +56,18 @@ control. Don't forget to update the `tag:Testnet` filter in
 
 ### Secrets
 
-As with most infrastructure, there are secrets you should keep locally and not
-add to the repository. These secret variables are expected to be found in a
-`secret.yml` file in the root of the repository. A
-[example-secret.yml](./example-secret.yml) file is included to indicate what is
-required.
-
-Additionally, you should have the `AWS_ACCESS_KEY` and `AWS_SECRET_KEY`
-environment variables set.
+* TODO
 
 ### Roles
 
-There are several Ansible [roles](./roles), each providing functionality for a
+There are several Ansible [roles](./playbooks/roles), each providing functionality for a
 different service:
 
-- [`common`](./roles/common): provides common variables (required by most roles).
-- [`aws`](./roles/asws): provides tasks for managing AWS infrastructure.
-- [`geth`](./roles/geth): provides tasks for managing Geth.
-- [`lighthouse`](./roles/lighthouse): provides tasks for managing Lighthouse.
-- [`rust`](./roles/rust): provides tasks for installing and upgrading Rust.
-
+- [`common`](./playbooks/roles/common): Provides common variables (required by most roles).
+- [`aws`](./playbooks/roles/asws): Provides tasks for managing AWS infrastructure.
+- [`geth`](./playbooks/roles/geth): Provides tasks for managing Geth.
+- [`lighthouse`](./playbooks/roles/lighthouse): Provides tasks for managing Lighthouse.
+- [`rust`](./playbooks/roles/rust): Provides tasks for installing and upgrading Rust.
 
 ### Plays
 
