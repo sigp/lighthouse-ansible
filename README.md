@@ -16,25 +16,24 @@ nodes. It supports two primary types of nodes:
 
 These processes are run via the following three systemd units:
 
-- [`lighthouse-bn.service`](./roles/lighthouse/templates/lighthouse-bn.service.j2):
+- [`lighthouse-bn.service`](./playbook/roles/lighthouse/templates/lighthouse-bn.service.j2):
   - Runs `lighthouse bn ...`
   - Data directory at `~/.lighthouse/beacon`.
   - Start with `systemctl start lighthouse-bn`.
   - Stop with `systemctl stop lighthouse-bn`.
   - Follow logs with `journalctl -f -u lighthouse-bn`
-- [`lighthouse-vc.service`](./roles/lighthouse/templates/lighthouse-vc.service.j2):
+- [`lighthouse-vc.service`](./playbook/roles/lighthouse/templates/lighthouse-vc.service.j2):
   - Runs `lighthouse vc ...`
   - Data directory at `~/.lighthouse/validators`.
   - Start with `systemctl start lighthouse-vc`.
   - Stop with `systemctl stop lighthouse-vc`.
   - Follow logs with `journalctl -f -u lighthouse-vc`
-- [`geth.service`](./roles/geth/templates/geth.service.j2):
+- [`geth.service`](./rplaybook/oles/geth/templates/geth.service.j2):
   - Runs `geth ...`
   - Data directory at `~/.ethereum`.
   - Start with `systemctl start geth`.
   - Stop with `systemctl stop geth`.
   - Follow logs with `journalctl -f -u geth`
-
 
 ## Ansible Usage
 
@@ -43,20 +42,23 @@ Structure](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_ro
 
 ### Inventory
 
-The [`example-testnet`](./example-testnet) is an Ansible [Dynamic
+The [`example`](./environments/example) is an Ansible [Dynamic
 Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_dynamic_inventory.html)
 using the [EC2 inventory source]
 (https://docs.ansible.com/ansible/latest/plugins/inventory/aws_ec2.html).
 
-Configure your own testnet by duplicating the `example-testnet` inventory.
-Modify the `group_vars/all.yml` file to configure it. Be sure to use a
+Configure your own testnet by duplicating the `example` inventory.
+Modify the `group_vars/all/env_specific.yml` file to configure it. Be sure to use a
 different `testnet_tag` for each testnet, so you can maintain independent
 control. Don't forget to update the `tag:Testnet` filter in
 `hosts.aws_ec2.yml`!
 
 ### Secrets
 
-* TODO
+The [`environments`](./environments) directory contains a `secrets-example.yml` file.
+
+Copy this file into `secrets.yml` changing the adequate values. This file is ignored by
+git to prevent accidental addings and pushings into the repository.
 
 ### Roles
 
@@ -77,19 +79,14 @@ different service:
 Playbooks are run using the `ansible-playbook` CLI command. Here's an example:
 
 ```shell
-ansible-playbook -i example-testnet infrastructure.yml
+ansible-playbook -i environments/example playbooks/testnet.yml
 ```
 
-This command will deploy all the infrastructure defined in `example-testnet`
+This command will deploy all the infrastructure defined in `example`
 (some security groups and EC2 instances). Check to see that nodes were deployed
-with `ansible-inventory -i example-testnet/ --graph`.
+with `ansible-inventory -i environments/example/ --graph`.
 
-#### List of Plays
-
-Each play is listed here:
- - [infrastructure.yml](./infrastructure.yml): deploys or updates the AWS infrastructure that forms the hosts.
- - [packages.yml](./packages.yml): deploys or updates packages and configuration on hosts created by the above play.
- - [kill-infrastructure.yml](./kill-infrastructure.yml): terminates all the running infrastructure (use with caution).
+The `default` environment (See `ansible.cfg`) is example, will deploy a generic testnet.
 
 ## Starting a testnet
 
@@ -100,7 +97,7 @@ In this example we're going to start a new testnet called "unity-4k".
 If the deposit contract is not yet deployed, you can deploy it with:
 
 ```bash
-ansible-playbook utils-deploy-deposit-contract.yml
+ansible-playbook playbooks/utils-deploy-deposit-contract.yml
 ```
 
 It'll wait for 3 block confirmations then print something like:
@@ -115,10 +112,10 @@ Take note of these variables, they'll be required in the next step.
 
 ### 1. Define inventory
 
-Create a new inventory directory by copying an existing one (e.g., `example-testnet`):
+Create a new inventory directory by copying an existing one (e.g., `example`):
 
 ```bash
-cp -r example-testnet/ unity-4k
+cp -r environments/example/ environments/unity-4k
 ```
 
 The _testnet tag_ uniquely indentifies testnet infrastructure and
@@ -126,10 +123,10 @@ configuration. It is an error to create two tesnets with the same testnet tag.
 Ensure the testnet tag is changed in the following parts of the new inventory.
 Ensure you replace `exampletestnet` with `unity-4k` in:
 
-- The `tag:Testnet` field in `unity-4k/hosts.aws_ec2.yml`
-- The `testnet_tag` var in `unity-4k/group_vars/all.yml`
+- The `tag:Testnet` field in `environments/unity-4k/hosts.aws_ec2.yml`
+- The `testnet_tag` var in `environments/unity-4k/group_vars/all.yml`
 
-Then, configure your testnet parameters in `unity-4k/group_vars/all.yml`. In
+Then, configure your testnet parameters in `environments/unity-4k/group_vars/all/env_specific.yml`. In
 this testnet we want to have 4,096 validators at genesis, spread across 4 AWS
 regions where each region has 2 VC+BN hosts and 2 "boot nodes" that are just
 running a BN (16 nodes in total).
@@ -164,7 +161,7 @@ regions:
 Now the testnet is defined, we can actually create the infrastructure on AWS with:
 
 ```bash
-ansible-playbook -i unity-4k infrastructure.yml
+ansible-playbook -i environments/unity-4k playbooks/itestnet/nfrastructure.yml
 ```
 
 This command will create EC2 security groups and provision EC2 instances across
@@ -172,15 +169,4 @@ all regions.
 
 ### 2. Provision software packages
 
-With the infrastructure now in place, we can install Lighthouse, Geth and the other required software.
-
-```bash
-ansible-playbook -i unity-4k -f 17 packages.yml
-```
-
-This command will do a lot of compilation, expect to take quite a while (minutes to hours).
-
-Note: I have used `-f 17` to [set the number of parallel
-processes](https://docs.ansible.com/ansible/latest/user_guide/playbooks_strategies.html#id2).
-I know this testnet has 17 instances (16 nodes + 1 metrics server), so this
-should ensure they build in parallel.
+* TODO
