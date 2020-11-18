@@ -161,7 +161,7 @@ regions:
 Now the testnet is defined, we can actually create the infrastructure on AWS with:
 
 ```bash
-ansible-playbook -i environments/unity-4k playbooks/15-1-testnet-infrastructure.yml
+ansible-playbook -i environments/unity-4k playbooks/10-1-testnet-infrastructure.yml
 ```
 
 This command will create EC2 security groups and provision EC2 instances across

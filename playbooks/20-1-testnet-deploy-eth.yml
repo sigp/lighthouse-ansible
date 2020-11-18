@@ -5,8 +5,6 @@
   roles:
     - common
     - geth
-  vars_files:
-    - ./secret.yml
   tasks:
     - name: Provide initial eth1 wallet and ETH
       include_tasks: roles/geth/tasks/create-and-endow-wallet.yml

@@ -2,13 +2,13 @@
   import_playbook: 20-1-testnet-deploy-eth.yml
 
 - name: Install software on nodes
-  import_playbook: testnet-nodes.yml
+  import_playbook: 30-1-testnet-nodes.yml
 
 - name: Configure the metrics server
-  import_playbook: testnet-metrics.yml
+  import_playbook: 40-1-testnet-metrics.yml
 
 - name: Define and distribute the testnet spec
-  import_playbook: testnet-specification.yml
+  import_playbook: 50-1-testnet-specification.yml
 
 - name: Start the testnet
-  import_playbook: testnet-start.yml
+  import_playbook: 80-5-testnet-start.yml

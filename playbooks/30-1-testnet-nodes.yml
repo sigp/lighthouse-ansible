@@ -12,8 +12,6 @@
     - rust
     - lighthouse
     - cloudalchemy.node-exporter
-  vars_files:
-    - ./secret.yml
   tasks:
     - name: Add keys to ssh/authorized_keys
       include_tasks: roles/aws/tasks/authorized-keys.yml

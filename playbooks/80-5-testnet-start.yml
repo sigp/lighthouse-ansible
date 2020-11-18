@@ -8,8 +8,6 @@
     - lighthouse_bn
     - lighthouse_vc
     - geth
-  vars_files:
-    - ./secret.yml
   gather_facts:
     false
   tasks:
