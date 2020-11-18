@@ -8,6 +8,8 @@
   ec2_group:
     name: "{{ security_group_nodes }}"
     description: "Public-facing Lighthouse nodes for {{ testnet_tag }}"
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
     region: "{{ item }}"
     tags:
       Owner: "{{ aws_owner }}"
@@ -48,6 +50,8 @@
   ec2_group:
     name: "{{ security_group_metrics }}"
     description: "Metrics server for {{ testnet_tag }}"
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
     region: "{{ metrics_server_region }}"
     tags:
       Owner: "{{ aws_owner }}"

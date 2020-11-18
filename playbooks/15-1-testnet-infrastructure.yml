@@ -5,8 +5,6 @@
   gather_facts: False
   roles:
     - aws
-  vars_files:
-    - ./secret.yml
   tasks:
     - name: Configure security groups
       include_tasks: roles/aws/tasks/ec2-security-groups-provision.yml
