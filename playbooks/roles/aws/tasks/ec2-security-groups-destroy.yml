@@ -4,10 +4,14 @@
   ec2_group:
     name: "{{ security_group_nodes }}"
     region: "{{ item }}"
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
     state: absent
 
 - name: Delete security group for metrics server
   ec2_group:
     name: "{{ security_group_metrics }}"
     region: "{{ metrics_server_region }}"
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
     state: absent

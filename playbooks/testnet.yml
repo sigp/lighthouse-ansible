@@ -1,5 +1,5 @@
 - name: Provision ETH
-  import_playbook: testnet-deploy-eth.yml
+  import_playbook: 20-1-testnet-deploy-eth.yml
 
 - name: Install software on nodes
   import_playbook: testnet-nodes.yml
